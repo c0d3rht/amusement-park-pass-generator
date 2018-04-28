@@ -30,7 +30,7 @@ class Pass {
     }
     
     var rideAccess: [RideAccess] {
-        if visitor is Guest && (visitor as! Guest).type == .vip {
+        if visitor is Guest, (visitor as! Guest).type == .vip {
             return [.allRides, .skipRides]
         }
         
@@ -38,7 +38,7 @@ class Pass {
     }
     
     var discount: Discount? {
-        if visitor is Guest && (visitor as! Guest).type == .vip {
+        if visitor is Guest, (visitor as! Guest).type == .vip {
             return (food: 10, merchandise: 20)
         }
         
