@@ -17,10 +17,10 @@ class Guest: Passable {
     var name: Name?
     var address: Address?
     var dateOfBirth: Date?
-    var socialSecurityNumber: Int?
+    var socialSecurityNumber: String?
     let type: GuestType
     
-    init(name: Name?, address: Address?, dateOfBirth: Date?, socialSecurityNumber: Int?, type: GuestType) throws {
+    init(name: Name?, address: Address?, dateOfBirth: Date?, socialSecurityNumber: String?, type: GuestType) throws {
         if type == .child {
             guard dateOfBirth != nil else {
                 throw FormError.invalidDateOfBirth("Your birth date is not in the correct format.")

@@ -3,7 +3,7 @@ import Foundation
 protocol Passable {
     var name: Name? { get }
     var address: Address? { get }
-    var socialSecurityNumber: Int? { get }
+    var socialSecurityNumber: String? { get }
     var dateOfBirth: Date? { get }
 }
 
