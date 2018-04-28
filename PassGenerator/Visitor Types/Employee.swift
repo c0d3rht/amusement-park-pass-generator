@@ -25,7 +25,7 @@ class Employee: Passable {
             throw FormError.invalidDateOfBirth("Your birth date is not in the correct format.")
         }
         
-        let pattern = "\\s*\\d{3}\\s*-\\s*\\d{2}\\s*-\\s*\\d{4}\\s*"
+        let pattern = "\\s*\\d{3}\\s*-?\\s*\\d{2}\\s*-?\\s*\\d{4}\\s*"
         let expression = try! NSRegularExpression(pattern: pattern, options: .caseInsensitive)
         
         guard let string = socialSecurityNumber, expression.matches(in: string, options: .reportCompletion, range: NSRange(location: 0, length: string.count)).count == 1 else {

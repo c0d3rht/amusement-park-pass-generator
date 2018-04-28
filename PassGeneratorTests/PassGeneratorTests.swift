@@ -21,7 +21,7 @@ class PassGeneratorTests: XCTestCase {
             address = try Address(street: "1 Infinite Loop", city: "Cupertino", state: "California", zipCode: 95014)
         }
         
-        socialSecurityNumber = "123 - 45 - 6789"
+        socialSecurityNumber = " 123    45     -   6789   "
         dateOfBirth = Date(timeIntervalSince1970: 956620800000)
         
         dateFormatter = TestDateFormatter()
