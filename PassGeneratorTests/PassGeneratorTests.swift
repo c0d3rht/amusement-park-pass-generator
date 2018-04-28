@@ -173,15 +173,17 @@ class PassGeneratorTests: XCTestCase {
     func testSwipeAccess() {
         handleErrors {
             pass = Pass(contentsOf: try Manager(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, type: .general))
+            pass.delegate = Greeter()
         }
         
-        pass.delegate = Greeter()
-        pass.swipe()
+        pass.swipe() // Access Granted
         
         if let date = pass.lastTimeSwiped {
             pass.lastTimeSwiped = date.addingTimeInterval(3)
             XCTAssertFalse(pass.lastTimeSwiped! == date.addingTimeInterval(3))
         }
+        
+        pass.swipe() // Access Denied
     }
     
     // MARK: - Helper Methods
@@ -219,12 +221,12 @@ class Greeter: PassDelegate {
     
     func didSwipeWhenAccessGranted(_ pass: Pass) {
         if let date = pass.visitor.dateOfBirth, formatter.string(from: Date()) == formatter.string(from: date) {
-            print("\nHappy Birthday!")
+            print("\nHappy Birthday!\n")
         }
     }
     
     func didSwipeWhenAccessDenied(_ pass: Pass) {
-        print("Please wait for 5 seconds.")
+        print("\nPlease wait for 5 seconds.\n")
     }
     
 }
