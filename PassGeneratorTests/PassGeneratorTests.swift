@@ -41,7 +41,7 @@ class PassGeneratorTests: XCTestCase {
         dateFormatter = nil
     }
     
-    // MARK: - Tests for Guest Types
+    // MARK: - Tests on Guest Types
     
     func testClassicGuest() {
         handleErrors {
@@ -96,7 +96,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertTrue(pass.discount == nil)
     }
     
-    // MARK: - Tests for Employee Types
+    // MARK: - Tests on Employee Types
     
     func testFoodEmployee() {
         handleErrors {
@@ -149,7 +149,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.discount == nil)
     }
     
-    // MARK: - Tests for Manager Type(s)
+    // MARK: - Tests on Manager Type(s)
     
     func testManager() {
         handleErrors {
@@ -202,7 +202,7 @@ class PassGeneratorTests: XCTestCase {
     
 }
 
-// MARK: - Helpers
+// MARK: - Helper Classes
 
 class TestDateFormatter: DateFormatter {
     required init?(coder aDecoder: NSCoder) {
