@@ -25,7 +25,7 @@ class Employee: Passable {
             throw FormError.invalidDateOfBirth("Your birth date is not in the correct format.")
         }
         
-        guard let string = socialSecurityNumber, FormChecker.ssnMatchesFormat(string) else {
+        guard let string = socialSecurityNumber, Employee.isValidSSN(string) else {
             throw FormError.invalidSocialSecurityNumber("Your social security number is not in the correct format.")
         }
         
