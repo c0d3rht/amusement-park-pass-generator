@@ -17,15 +17,15 @@ class Employee: Passable {
     var name: Name?
     var address: Address?
     var dateOfBirth: Date?
-    var socialSecurityNumber: Int?
+    var socialSecurityNumber: String?
     let type: EmployeeType
     
-    init(name: Name?, address: Address?, dateOfBirth: Date?, socialSecurityNumber: Int?, type: EmployeeType) throws {
+    init(name: Name?, address: Address?, dateOfBirth: Date?, socialSecurityNumber: String?, type: EmployeeType) throws {
         guard dateOfBirth != nil else {
             throw FormError.invalidDateOfBirth("Your birth date is not in the correct format.")
         }
         
-        guard let number = socialSecurityNumber, String(number).count == 9 else {
+        guard let string = socialSecurityNumber, Employee.isValidSSN(string) else {
             throw FormError.invalidSocialSecurityNumber("Your social security number is not in the correct format.")
         }
         

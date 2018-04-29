@@ -17,15 +17,15 @@ class Manager: Passable {
     var name: Name?
     var address: Address?
     var dateOfBirth: Date?
-    var socialSecurityNumber: Int?
+    var socialSecurityNumber: String?
     let type: ManagerType
     
-    init(name: Name?, address: Address?, dateOfBirth: Date?, socialSecurityNumber: Int?, type: ManagerType) throws {
+    init(name: Name?, address: Address?, dateOfBirth: Date?, socialSecurityNumber: String?, type: ManagerType) throws {
         guard dateOfBirth != nil else {
             throw FormError.invalidDateOfBirth("Your birth date is not in the correct format.")
         }
         
-        guard let number = socialSecurityNumber, String(number).count == 9 else {
+        guard let string = socialSecurityNumber, Manager.isValidSSN(string) else {
             throw FormError.invalidSocialSecurityNumber("Your social security number is not in the correct format.")
         }
         

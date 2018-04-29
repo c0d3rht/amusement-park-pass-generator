@@ -3,8 +3,17 @@ import Foundation
 protocol Passable {
     var name: Name? { get }
     var address: Address? { get }
-    var socialSecurityNumber: Int? { get }
+    var socialSecurityNumber: String? { get }
     var dateOfBirth: Date? { get }
+}
+
+extension Passable {
+    static func isValidSSN(_ string: String) -> Bool {
+        let pattern = "\\s*(\\d{3})\\s*-?\\s*(\\d{2})\\s*-?\\s*(\\d{4})\\s*"
+        let expression = try! NSRegularExpression(pattern: pattern, options: .caseInsensitive)
+        
+        return expression.matches(in: string, options: .reportCompletion, range: NSRange(location: 0, length: string.count)).count == 1
+    }
 }
 
 enum FormError: Error {

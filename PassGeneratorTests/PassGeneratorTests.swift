@@ -5,7 +5,7 @@ class PassGeneratorTests: XCTestCase {
     
     var fullName: Name!
     var address: Address!
-    var securityNumber: Int!
+    var socialSecurityNumber: String!
     var dateOfBirth: Date!
     
     var visitor: Passable!
@@ -21,7 +21,7 @@ class PassGeneratorTests: XCTestCase {
             address = try Address(street: "1 Infinite Loop", city: "Cupertino", state: "California", zipCode: 95014)
         }
         
-        securityNumber = 192837465
+        socialSecurityNumber = " 123    45     -   6789   "
         dateOfBirth = Date(timeIntervalSince1970: 956620800000)
         
         dateFormatter = TestDateFormatter()
@@ -32,7 +32,7 @@ class PassGeneratorTests: XCTestCase {
         
         fullName = nil
         address = nil
-        securityNumber = nil
+        socialSecurityNumber = nil
         dateOfBirth = nil
         
         visitor = nil
@@ -41,11 +41,11 @@ class PassGeneratorTests: XCTestCase {
         dateFormatter = nil
     }
     
-    // MARK: - Tests for Guest Types
+    // MARK: - Tests on Guest Types
     
     func testClassicGuest() {
         handleErrors {
-            pass = Pass(contentsOf: try Guest(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: securityNumber, type: .classic))
+            pass = Pass(contentsOf: try Guest(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, type: .classic))
         }
         
         XCTAssertTrue(pass.hasAccess(to: .amusement))
@@ -62,7 +62,7 @@ class PassGeneratorTests: XCTestCase {
     
     func testVIPGuest() {
         handleErrors {
-            pass = Pass(contentsOf: try Guest(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: securityNumber, type: .vip))
+            pass = Pass(contentsOf: try Guest(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, type: .vip))
         }
         
         XCTAssertTrue(pass.hasAccess(to: .amusement))
@@ -79,7 +79,7 @@ class PassGeneratorTests: XCTestCase {
     
     func testChildGuest() {
         handleErrors {
-            pass = Pass(contentsOf: try Guest(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: securityNumber, type: .child))
+            pass = Pass(contentsOf: try Guest(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, type: .child))
         }
         
         XCTAssertTrue(dateOfBirth.timeIntervalSinceNow > 157680000)
@@ -96,11 +96,11 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertTrue(pass.discount == nil)
     }
     
-    // MARK: - Tests for Employee Types
+    // MARK: - Tests on Employee Types
     
     func testFoodEmployee() {
         handleErrors {
-            pass = Pass(contentsOf: try Employee(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: securityNumber, type: .food))
+            pass = Pass(contentsOf: try Employee(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, type: .food))
         }
         
         XCTAssertTrue(pass.hasAccess(to: .amusement))
@@ -117,7 +117,7 @@ class PassGeneratorTests: XCTestCase {
     
     func testRideEmployee() {
         handleErrors {
-            pass = Pass(contentsOf: try Employee(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: securityNumber, type: .ride))
+            pass = Pass(contentsOf: try Employee(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, type: .ride))
         }
         
         XCTAssertTrue(pass.hasAccess(to: .amusement))
@@ -134,7 +134,7 @@ class PassGeneratorTests: XCTestCase {
     
     func testMaintenanceEmployee() {
         handleErrors {
-            pass = Pass(contentsOf: try Employee(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: securityNumber, type: .maintenance))
+            pass = Pass(contentsOf: try Employee(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, type: .maintenance))
         }
         
         XCTAssertTrue(pass.hasAccess(to: .amusement))
@@ -149,11 +149,11 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.discount == nil)
     }
     
-    // MARK: - Tests for Manager Type(s)
+    // MARK: - Tests on Manager Type(s)
     
     func testManager() {
         handleErrors {
-            pass = Pass(contentsOf: try Manager(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: securityNumber, type: .general))
+            pass = Pass(contentsOf: try Manager(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, type: .general))
         }
         
         XCTAssertTrue(pass.hasAccess(to: .amusement))
@@ -172,16 +172,18 @@ class PassGeneratorTests: XCTestCase {
     
     func testSwipeAccess() {
         handleErrors {
-            pass = Pass(contentsOf: try Manager(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: securityNumber, type: .general))
+            pass = Pass(contentsOf: try Manager(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, type: .general))
+            pass.delegate = Greeter()
         }
         
-        pass.delegate = Greeter()
-        pass.swipe()
+        pass.swipe() // Access Granted
         
         if let date = pass.lastTimeSwiped {
             pass.lastTimeSwiped = date.addingTimeInterval(3)
             XCTAssertFalse(pass.lastTimeSwiped! == date.addingTimeInterval(3))
         }
+        
+        pass.swipe() // Access Denied
     }
     
     // MARK: - Helper Methods
@@ -190,15 +192,17 @@ class PassGeneratorTests: XCTestCase {
         do {
             try closure()
         } catch let error as FormError {
-            fatalError(error.description)
+            print(error.description)
+            XCTFail()
         } catch {
-            fatalError("\(error)")
+            print("\(error)")
+            XCTFail()
         }
     }
     
 }
 
-// MARK: - Helpers
+// MARK: - Helper Classes
 
 class TestDateFormatter: DateFormatter {
     required init?(coder aDecoder: NSCoder) {
@@ -217,12 +221,12 @@ class Greeter: PassDelegate {
     
     func didSwipeWhenAccessGranted(_ pass: Pass) {
         if let date = pass.visitor.dateOfBirth, formatter.string(from: Date()) == formatter.string(from: date) {
-            print("\nHappy Birthday!")
+            print("\nHappy Birthday!\n")
         }
     }
     
     func didSwipeWhenAccessDenied(_ pass: Pass) {
-        print("Please wait for 5 seconds.")
+        print("\nPlease wait for 5 seconds.\n")
     }
     
 }
