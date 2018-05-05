@@ -21,6 +21,8 @@
 		B5A63482207F896900F71C80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5A63481207F896900F71C80 /* Assets.xcassets */; };
 		B5A63485207F896900F71C80 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5A63483207F896900F71C80 /* LaunchScreen.storyboard */; };
 		B5A6348D207F89A400F71C80 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A6348C207F89A400F71C80 /* Manager.swift */; };
+		B5C948CE209B6E25004A8A47 /* PassController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C948CD209B6E25004A8A47 /* PassController.swift */; };
+		B5DEA6CC2095FDCE0051980D /* Vendor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DEA6CB2095FDCE0051980D /* Vendor.swift */; };
 		B5F781582089EBE300FD9E15 /* UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F781572089EBE300FD9E15 /* UI.swift */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +55,8 @@
 		B5A63484207F896900F71C80 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B5A63486207F896900F71C80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5A6348C207F89A400F71C80 /* Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
+		B5C948CD209B6E25004A8A47 /* PassController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassController.swift; sourceTree = "<group>"; };
+		B5DEA6CB2095FDCE0051980D /* Vendor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vendor.swift; sourceTree = "<group>"; };
 		B5F781572089EBE300FD9E15 /* UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,24 +78,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B52500F72093213800C86168 /* Visitor Details */ = {
+		B52500F72093213800C86168 /* Entrant Details */ = {
 			isa = PBXGroup;
 			children = (
 				B5341F2320877940005F2283 /* Name.swift */,
 				B5341F252087795D005F2283 /* Address.swift */,
 				B5341F1D20877736005F2283 /* Passable.swift */,
 			);
-			path = "Visitor Details";
+			path = "Entrant Details";
 			sourceTree = "<group>";
 		};
-		B52500F82093215000C86168 /* Visitor Types */ = {
+		B52500F82093215000C86168 /* Entrant Types */ = {
 			isa = PBXGroup;
 			children = (
 				B5341F1F20877820005F2283 /* Guest.swift */,
 				B5341F212087784C005F2283 /* Employee.swift */,
 				B5A6348C207F89A400F71C80 /* Manager.swift */,
+				B5DEA6CB2095FDCE0051980D /* Vendor.swift */,
 			);
-			path = "Visitor Types";
+			path = "Entrant Types";
 			sourceTree = "<group>";
 		};
 		B536889E208A0D02000360B1 /* PassGeneratorTests */ = {
@@ -126,12 +131,13 @@
 			children = (
 				B5A6347A207F896700F71C80 /* AppDelegate.swift */,
 				B5A6347C207F896700F71C80 /* FormController.swift */,
+				B5C948CD209B6E25004A8A47 /* PassController.swift */,
 				B5A6347E207F896700F71C80 /* Main.storyboard */,
 				B5A63481207F896900F71C80 /* Assets.xcassets */,
 				B5A63483207F896900F71C80 /* LaunchScreen.storyboard */,
 				B5A63486207F896900F71C80 /* Info.plist */,
-				B52500F72093213800C86168 /* Visitor Details */,
-				B52500F82093215000C86168 /* Visitor Types */,
+				B52500F72093213800C86168 /* Entrant Details */,
+				B52500F82093215000C86168 /* Entrant Types */,
 				B52500F520930F1300C86168 /* Pass.swift */,
 				B52500F920932D4C00C86168 /* Pass Details.swift */,
 				B5F781572089EBE300FD9E15 /* UI.swift */,
@@ -256,7 +262,9 @@
 				B5A6348D207F89A400F71C80 /* Manager.swift in Sources */,
 				B52500FA20932D4C00C86168 /* Pass Details.swift in Sources */,
 				B5341F2420877940005F2283 /* Name.swift in Sources */,
+				B5C948CE209B6E25004A8A47 /* PassController.swift in Sources */,
 				B5341F262087795D005F2283 /* Address.swift in Sources */,
+				B5DEA6CC2095FDCE0051980D /* Vendor.swift in Sources */,
 				B52500F620930F1300C86168 /* Pass.swift in Sources */,
 				B5A6347B207F896700F71C80 /* AppDelegate.swift in Sources */,
 			);

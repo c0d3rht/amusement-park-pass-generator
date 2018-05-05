@@ -19,15 +19,15 @@ extension Passable {
 enum FormError: Error {
     case invalidName(String)
     case invalidAddress(String)
-    case invalidSocialSecurityNumber(String)
-    case invalidDateOfBirth(String)
+    case invalidNumber(String)
+    case invalidDate(String)
     
     var description: String {
         switch self {
         case .invalidName(let message): return message
         case .invalidAddress(let message): return message
-        case .invalidSocialSecurityNumber(let message): return message
-        case .invalidDateOfBirth(let message): return message
+        case .invalidNumber(let message): return message
+        case .invalidDate(let message): return message
         }
     }
 }

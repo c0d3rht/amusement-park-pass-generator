@@ -13,7 +13,6 @@ extension ManagerType {
 }
 
 class Manager: Passable {
-    
     var name: Name?
     var address: Address?
     var dateOfBirth: Date?
@@ -21,12 +20,28 @@ class Manager: Passable {
     let type: ManagerType
     
     init(name: Name?, address: Address?, dateOfBirth: Date?, socialSecurityNumber: String?, type: ManagerType) throws {
+        guard name != nil, !name!.isIncomplete else {
+            throw FormError.invalidName("Your name is incomplete.")
+        }
+        
+        guard !name!.containsSpecialCharacters else {
+            throw FormError.invalidName("Your name contains special characters.")
+        }
+        
         guard dateOfBirth != nil else {
-            throw FormError.invalidDateOfBirth("Your birth date is not in the correct format.")
+            throw FormError.invalidDate("Your birth date is not in the correct format.")
         }
         
         guard let string = socialSecurityNumber, Manager.isValidSSN(string) else {
-            throw FormError.invalidSocialSecurityNumber("Your social security number is not in the correct format.")
+            throw FormError.invalidNumber("Your social security number is not in the correct format.")
+        }
+        
+        guard address != nil, !address!.isIncomplete else {
+            throw FormError.invalidAddress("Your address is incomplete.")
+        }
+        
+        guard !address!.containsSpecialCharacters else {
+            throw FormError.invalidAddress("Your address consists of invalid characters.")
         }
         
         self.name = name

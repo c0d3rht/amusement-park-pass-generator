@@ -8,7 +8,7 @@ class PassGeneratorTests: XCTestCase {
     var socialSecurityNumber: String!
     var dateOfBirth: Date!
     
-    var visitor: Passable!
+    var entrant: Passable!
     var pass: Pass!
     
     var dateFormatter: TestDateFormatter!
@@ -16,11 +16,8 @@ class PassGeneratorTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        handleErrors {
-            fullName = try Name("John", "Doe")
-            address = try Address(street: "1 Infinite Loop", city: "Cupertino", state: "California", zipCode: 95014)
-        }
-        
+        fullName = Name("John", "Doe")
+        address = Address(street: "1 Infinite Loop", city: "Cupertino", state: "California", zipCode: 95014)
         socialSecurityNumber = " 123    45     -   6789   "
         dateOfBirth = Date(timeIntervalSince1970: 956620800000)
         
@@ -35,7 +32,7 @@ class PassGeneratorTests: XCTestCase {
         socialSecurityNumber = nil
         dateOfBirth = nil
         
-        visitor = nil
+        entrant = nil
         pass = nil
         
         dateFormatter = nil
@@ -54,8 +51,8 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.hasAccess(to: .maintenance))
         XCTAssertFalse(pass.hasAccess(to: .office))
         
-        XCTAssertTrue(pass.rideAccess.contains(.allRides))
-        XCTAssertFalse(pass.rideAccess.contains(.skipRides))
+        XCTAssertTrue(pass.hasAccess(to: .allRides))
+        XCTAssertFalse(pass.hasAccess(to: .skipRides))
         
         XCTAssertTrue(pass.discount == nil)
     }
@@ -71,8 +68,8 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.hasAccess(to: .maintenance))
         XCTAssertFalse(pass.hasAccess(to: .office))
 
-        XCTAssertTrue(pass.rideAccess.contains(.allRides))
-        XCTAssertTrue(pass.rideAccess.contains(.skipRides))
+        XCTAssertTrue(pass.hasAccess(to: .allRides))
+        XCTAssertTrue(pass.hasAccess(to: .skipRides))
 
         XCTAssertFalse(pass.discount == nil)
     }
@@ -90,10 +87,44 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.hasAccess(to: .maintenance))
         XCTAssertFalse(pass.hasAccess(to: .office))
         
-        XCTAssertTrue(pass.rideAccess.contains(.allRides))
-        XCTAssertFalse(pass.rideAccess.contains(.skipRides))
+        XCTAssertTrue(pass.hasAccess(to: .allRides))
+        XCTAssertFalse(pass.hasAccess(to: .skipRides))
         
         XCTAssertTrue(pass.discount == nil)
+    }
+    
+    func testSeasonGuest() {
+        handleErrors {
+            pass = Pass(contentsOf: try Guest(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, type: .season))
+        }
+        
+        XCTAssertTrue(pass.hasAccess(to: .amusement))
+        XCTAssertFalse(pass.hasAccess(to: .kitchen))
+        XCTAssertFalse(pass.hasAccess(to: .rideControl))
+        XCTAssertFalse(pass.hasAccess(to: .maintenance))
+        XCTAssertFalse(pass.hasAccess(to: .office))
+        
+        XCTAssertTrue(pass.hasAccess(to: .allRides))
+        XCTAssertTrue(pass.hasAccess(to: .skipRides))
+        
+        XCTAssertFalse(pass.discount == nil)
+    }
+    
+    func testSeniorGuest() {
+        handleErrors {
+            pass = Pass(contentsOf: try Guest(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, type: .senior))
+        }
+        
+        XCTAssertTrue(pass.hasAccess(to: .amusement))
+        XCTAssertFalse(pass.hasAccess(to: .kitchen))
+        XCTAssertFalse(pass.hasAccess(to: .rideControl))
+        XCTAssertFalse(pass.hasAccess(to: .maintenance))
+        XCTAssertFalse(pass.hasAccess(to: .office))
+        
+        XCTAssertTrue(pass.hasAccess(to: .allRides))
+        XCTAssertTrue(pass.hasAccess(to: .skipRides))
+        
+        XCTAssertFalse(pass.discount == nil)
     }
     
     // MARK: - Tests on Employee Types
@@ -109,8 +140,8 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.hasAccess(to: .maintenance))
         XCTAssertFalse(pass.hasAccess(to: .office))
         
-        XCTAssertTrue(pass.rideAccess.contains(.allRides))
-        XCTAssertFalse(pass.rideAccess.contains(.skipRides))
+        XCTAssertTrue(pass.hasAccess(to: .allRides))
+        XCTAssertFalse(pass.hasAccess(to: .skipRides))
         
         XCTAssertFalse(pass.discount == nil)
     }
@@ -126,8 +157,8 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.hasAccess(to: .maintenance))
         XCTAssertFalse(pass.hasAccess(to: .office))
         
-        XCTAssertTrue(pass.rideAccess.contains(.allRides))
-        XCTAssertFalse(pass.rideAccess.contains(.skipRides))
+        XCTAssertTrue(pass.hasAccess(to: .allRides))
+        XCTAssertFalse(pass.hasAccess(to: .skipRides))
         
         XCTAssertFalse(pass.discount == nil)
     }
@@ -143,11 +174,28 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertTrue(pass.hasAccess(to: .maintenance))
         XCTAssertFalse(pass.hasAccess(to: .office))
         
-        XCTAssertTrue(pass.rideAccess.contains(.allRides))
-        XCTAssertFalse(pass.rideAccess.contains(.skipRides))
+        XCTAssertTrue(pass.hasAccess(to: .allRides))
+        XCTAssertFalse(pass.hasAccess(to: .skipRides))
         
         XCTAssertFalse(pass.discount == nil)
     }
+    
+//    func testContractEmployee() {
+//        handleErrors {
+//            pass = Pass(contentsOf: try Employee(name: fullName, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, type: .maintenance))
+//        }
+//        
+//        XCTAssertTrue(pass.hasAccess(to: .amusement))
+//        XCTAssertTrue(pass.hasAccess(to: .kitchen))
+//        XCTAssertTrue(pass.hasAccess(to: .rideControl))
+//        XCTAssertFalse(pass.hasAccess(to: .maintenance))
+//        XCTAssertFalse(pass.hasAccess(to: .office))
+//        
+//        XCTAssertTrue(pass.hasAccess(to: .allRides))
+//        XCTAssertFalse(pass.hasAccess(to: .skipRides))
+//        
+//        XCTAssertFalse(pass.discount == nil)
+//    }
     
     // MARK: - Tests on Manager Type(s)
     
@@ -162,8 +210,8 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertTrue(pass.hasAccess(to: .maintenance))
         XCTAssertTrue(pass.hasAccess(to: .office))
         
-        XCTAssertTrue(pass.rideAccess.contains(.allRides))
-        XCTAssertFalse(pass.rideAccess.contains(.skipRides))
+        XCTAssertTrue(pass.hasAccess(to: .allRides))
+        XCTAssertFalse(pass.hasAccess(to: .skipRides))
         
         XCTAssertFalse(pass.discount == nil)
     }
@@ -220,7 +268,7 @@ class Greeter: PassDelegate {
     let formatter = TestDateFormatter()
     
     func didSwipeWhenAccessGranted(_ pass: Pass) {
-        if let date = pass.visitor.dateOfBirth, formatter.string(from: Date()) == formatter.string(from: date) {
+        if let date = pass.entrant.dateOfBirth, formatter.string(from: Date()) == formatter.string(from: date) {
             print("\nHappy Birthday!\n")
         }
     }
