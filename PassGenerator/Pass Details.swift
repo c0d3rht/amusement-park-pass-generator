@@ -1,6 +1,8 @@
 import Foundation
 
-enum AccessibleArea: String {
+protocol AccessType {}
+
+enum AccessibleArea: String, AccessType {
     case amusement = "Amusement"
     case kitchen = "Kitchen"
     case rideControl = "Ride Control"
@@ -8,9 +10,9 @@ enum AccessibleArea: String {
     case office = "Office"
 }
 
-enum RideAccess: String {
-    case allRides = "Access all rides"
-    case skipRides = "Skip ride queues"
+enum RideAccess: String, AccessType {
+    case allRides = "All Rides"
+    case skipQueues = "Skip Queues"
 }
 
 typealias Discount = (food: Int, merchandise: Int)

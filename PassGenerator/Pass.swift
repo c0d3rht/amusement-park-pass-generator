@@ -1,11 +1,13 @@
 import Foundation
 
-protocol PassDelegate {
-    func didSwipeWhenAccessGranted(_ pass: Pass)
-    func didSwipeWhenAccessDenied(_ pass: Pass)
+protocol PassDelegate: class {
+    func didSwipeWhenAccessGranted()
+    func didSwipeWhenAccessDenied()
+    func didSwipeDuringProcessingTime(seconds: Double)
+    func processingTimeDidElapse()
 }
 
-class Pass {
+class Pass: CustomStringConvertible {
 
     let entrant: Passable
     
@@ -24,8 +26,10 @@ class Pass {
             return [.amusement, .kitchen, .rideControl, .maintenance, .office]
         case is Vendor:
             return [.amusement, .kitchen]
-        default:
+        case is Guest:
             return [.amusement]
+        default:
+            return []
         }
     }
     
@@ -34,7 +38,7 @@ class Pass {
         case is Guest:
             switch (entrant as! Guest).type {
             case .vip, .season, .senior:
-                return [.allRides, .skipRides]
+                return [.allRides, .skipQueues]
             default:
                 return [.allRides]
             }
@@ -65,57 +69,74 @@ class Pass {
         }
     }
     
+    let messageDuration = 5.0
     var lastTimeSwiped: Date? = nil {
         didSet {
-            if let oldValue = oldValue, let newValue = lastTimeSwiped, newValue < oldValue.addingTimeInterval(5) {
-                lastTimeSwiped = oldValue
+            if let previousDate = oldValue, let existingDate = lastTimeSwiped, existingDate < previousDate.addingTimeInterval(messageDuration) {
+                lastTimeSwiped = previousDate
             }
         }
     }
     
-    var type: String {
+    var description: String {
         switch entrant {
         case is Guest:
             return (entrant as! Guest).type.rawValue + " Pass"
         case is Employee:
-            switch (entrant as! Employee).type {
-            case .maintenance, .contract:
-                return (entrant as! Employee).type.rawValue + " Employee"
+            let employee = entrant as! Employee
+            let type = employee.type
+            
+            switch type {
+            case .maintenance:
+                return type.rawValue + " Employee"
+            case .contract:
+                return type.rawValue + " Employee (\(employee.projectNumber!))"
             default:
-                return (entrant as! Employee).type.rawValue
+                return type.rawValue
             }
         case is Manager:
             return (entrant as! Manager).type.rawValue
         case is Vendor:
             return "Vendor Pass"
         default:
-            return ""
+            return "Unidentified Pass"
         }
     }
     
-    var delegate: PassDelegate?
+    weak var delegate: PassDelegate?
     
     init(contentsOf entrant: Passable) {
         self.entrant = entrant
     }
     
-    func hasAccess(to area: AccessibleArea) -> Bool {
-        return accessibleAreas.contains(area)
+    func hasAccess<T: AccessType>(to type: T) -> Bool {
+        switch type {
+        case is AccessibleArea: return accessibleAreas.contains(type as! AccessibleArea)
+        case is RideAccess: return rideAccess.contains(type as! RideAccess)
+        default: return false
+        }
     }
     
-    func hasAccess(to access: RideAccess) -> Bool {
-        return rideAccess.contains(access)
-    }
-    
-    func swipe() {
+    func swipe<T: AccessType>(for type: T) {
         let currentTime = Date()
         lastTimeSwiped = currentTime
         
-        if lastTimeSwiped == currentTime {
-            delegate?.didSwipeWhenAccessGranted(self)
-        } else {
-            delegate?.didSwipeWhenAccessDenied(self)
+        if let date = lastTimeSwiped {
+            if date == currentTime {
+                if hasAccess(to: type) {
+                    delegate?.didSwipeWhenAccessGranted()
+                } else {
+                    delegate?.didSwipeWhenAccessDenied()
+                }
+            } else {
+                delegate?.didSwipeDuringProcessingTime(seconds: messageDuration)
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + messageDuration) {
+                self.delegate?.processingTimeDidElapse()
+            }
         }
     }
     
 }
+

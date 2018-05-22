@@ -21,12 +21,12 @@ class Employee: Passable {
     let projectNumber: Int?
     let type: EmployeeType
     
-    init(name: Name?, address: Address?, dateOfBirth: Date?, socialSecurityNumber: String?, projectNumber: Int? = nil, type: EmployeeType) throws {
-        guard name != nil, !name!.isIncomplete else {
+    init(name: Name?, address: Address?, dateOfBirth: Date?, socialSecurityNumber: String?, projectNumber: Int?, type: EmployeeType) throws {
+        guard let name = name, !name.isIncomplete else {
             throw FormError.invalidName("Your name is incomplete.")
         }
         
-        guard !name!.containsSpecialCharacters else {
+        guard !name.containsSpecialCharacters else {
             throw FormError.invalidName("Your name contains special characters.")
         }
         
@@ -38,11 +38,11 @@ class Employee: Passable {
             throw FormError.invalidNumber("Your social security number is not in the correct format.")
         }
         
-        guard address != nil, !address!.isIncomplete else {
+        guard let address = address, !address.isIncomplete else {
             throw FormError.invalidAddress("Your address is incomplete.")
         }
         
-        guard !address!.containsSpecialCharacters else {
+        guard !address.containsSpecialCharacters else {
             throw FormError.invalidAddress("Your address consists of invalid characters.")
         }
         

@@ -23,34 +23,32 @@ class Guest: Passable {
     
     init(name: Name?, address: Address?, dateOfBirth: Date?, socialSecurityNumber: String?, type: GuestType) throws {
         if type == .season || type == .senior {
-            guard name != nil, !name!.isIncomplete else {
+            guard let name = name, !name.isIncomplete else {
                 throw FormError.invalidName("Your name is incomplete.")
             }
             
-            guard !name!.containsSpecialCharacters else {
+            guard !name.containsSpecialCharacters else {
                 throw FormError.invalidName("Your name contains special characters.")
             }
             
-            guard let string = socialSecurityNumber, Guest.isValidSSN(string) else {
-                throw FormError.invalidNumber("Your social security number is not in the correct format.")
-            }
-            
-            guard address != nil, !address!.isIncomplete else {
-                throw FormError.invalidAddress("Your address is incomplete.")
-            }
-            
-            guard !address!.containsSpecialCharacters else {
-                throw FormError.invalidAddress("Your address consists of invalid characters.")
+            if type == .season {
+                guard let address = address, !address.isIncomplete else {
+                    throw FormError.invalidAddress("Your address is incomplete.")
+                }
+                
+                guard !address.containsSpecialCharacters else {
+                    throw FormError.invalidAddress("Your address consists of invalid characters.")
+                }
             }
         }
         
         if type == .child || type == .season || type == .senior {
-            guard dateOfBirth != nil else {
+            guard let date = dateOfBirth else {
                 throw FormError.invalidDate("Your birth date is not in the correct format.")
             }
             
             if type == .child {
-                guard dateOfBirth!.timeIntervalSinceNow > 157680000 else {
+                guard abs(date.timeIntervalSinceNow) < 157680000 else {
                     throw FormError.invalidDate("Your child is over the age of 5 years.")
                 }
             }

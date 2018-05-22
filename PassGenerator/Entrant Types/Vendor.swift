@@ -26,9 +26,9 @@ class Vendor: Passable {
             throw FormError.invalidDate("Your birth date is not in the correct format.")
         }
         
-//        guard dateOfVisit != nil else {
-//            throw FormError.invalidDate("The date of visit is not in the correct format.")
-//        }
+        guard dateOfVisit != nil else {
+            throw FormError.invalidDate("The date of visit is not in the correct format.")
+        }
         
         self.name = name
         self.address = address
