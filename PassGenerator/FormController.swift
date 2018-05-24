@@ -2,9 +2,17 @@ import UIKit
 
 class FormController: UIViewController {
     
+    enum Key {
+        case name, dateOfBirth, address, socialSecurityNumber, projectNumber, dateOfVisit
+    }
+    
+    // MARK: - Views
+    
     @IBOutlet weak var typeSegmentedControl: SegmentedControl!
     @IBOutlet weak var subtypeSegmentedControl: SegmentedControl!
     @IBOutlet weak var formStackView: UIStackView!
+    
+    // MARK: - Local Variables, Constants and Computed Properties
     
     var typeText: String {
         return typeSegmentedControl.titleForSegment(at: typeSegmentedControl.selectedSegmentIndex)!
@@ -14,15 +22,11 @@ class FormController: UIViewController {
         return subtypeSegmentedControl.titleForSegment(at: subtypeSegmentedControl.selectedSegmentIndex)!
     }
     
-    var typeIsSelected: Bool {
-        return typeSegmentedControl.selectedSegmentIndex != -1
+    var passTypeIsSelected: Bool {
+        return typeSegmentedControl.selectedSegmentIndex != -1 && subtypeSegmentedControl.selectedSegmentIndex != -1
     }
     
-    var subtypeIsSelected: Bool {
-        return subtypeSegmentedControl.selectedSegmentIndex != -1
-    }
-    
-    var data: [String: Any?] {
+    var data: [Key: Any?] {
         var firstName = ""
         var lastName = ""
         var dateOfBirth: Date? = nil
@@ -32,38 +36,36 @@ class FormController: UIViewController {
         var street = ""
         var city = ""
         var state = ""
-        var zipCode = 0
+        var zipCode = ""
         
         manageForm { label, textField in
-            if typeIsSelected && subtypeIsSelected, textField.state != .disabled, let type = LabelType(rawValue: label.text!), let text = textField.text {
+            if passTypeIsSelected && textField.state != .disabled, let type = LabelType(rawValue: label.text!), let text = textField.text {
                 let formatter = DateFormatter()
                 formatter.dateFormat = "MM / dd / yyyy"
                 
                 switch type {
                 case .firstName: firstName = text
                 case .lastName: lastName = text
-                case .dateOfBirth:
-                    dateOfBirth = formatter.date(from: text)
+                case .dateOfBirth: dateOfBirth = formatter.date(from: text)
                 case .socialSecurityNumber: socialSecurityNumber = text
                 case .streetAddress: street = text
                 case .city: city = text
                 case .state: state = text
-                case .zipCode: if let number = Int(text) { zipCode = number }
+                case .zipCode: zipCode = text
                 case .projectNumber: if let number = Int(text) { projectNumber = number }
-                case .dateOfVisit:
-                    dateOfVisit = formatter.date(from: text)
+                case .dateOfVisit: dateOfVisit = formatter.date(from: text)
                 default: break
                 }
             }
         }
         
         return [
-            Keys.name: Name(firstName, lastName),
-            Keys.dateOfBirth: dateOfBirth,
-            Keys.socialSecurityNumber: socialSecurityNumber,
-            Keys.address: Address(street: street, city: city, state: state, zipCode: zipCode),
-            Keys.projectNumber: projectNumber,
-            Keys.dateOfVisit: dateOfVisit
+            .name: Name(firstName, lastName),
+            .dateOfBirth: dateOfBirth,
+            .socialSecurityNumber: socialSecurityNumber,
+            .address: Address(street: street, city: city, state: state, zipCode: zipCode),
+            .projectNumber: projectNumber,
+            .dateOfVisit: dateOfVisit
         ]
     }
     
@@ -71,17 +73,7 @@ class FormController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        formStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-//        for stackView in formStackView.subviews {
-//            stackView.translatesAutoresizingMaskIntoConstraints = false
-//        }
-        
-        manageForm {
-//            $0.translatesAutoresizingMaskIntoConstraints = false
-//            $1.translatesAutoresizingMaskIntoConstraints = false
-            $1.disable()
-        }
+        manageForm { $1.setState(to: .disabled) }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -91,7 +83,7 @@ class FormController: UIViewController {
     }
     
     @IBAction func showCategories() {
-        manageForm { $1.disable() }
+        manageForm { $1.setState(to: .disabled) }
         
         let titles: [String]
         
@@ -117,127 +109,99 @@ class FormController: UIViewController {
     
     @IBAction func toggleFields() {
         manageForm { label, textField in
-            textField.enable()
-            
-            if let type = LabelType(rawValue: label.text!), type == .companyName {
-                textField.disable()
+            if !textField.isFirstResponder {
+                textField.setState(to: .normal)
             }
-        }
-        
-        switch typeText {
-        case "Guest":
-            if let type = GuestType(rawValue: subtypeText) {
-                manageForm { label, textField in
-                    if let type = LabelType(rawValue: label.text!) {
-                        switch type {
-                        case .socialSecurityNumber, .projectNumber, .dateOfVisit:
-                            textField.disable()
-                        default:
-                            break
-                        }
-                    }
+            
+            if let labelType = LabelType(rawValue: label.text!) {
+                if labelType == .companyName {
+                    textField.setState(to: .disabled)
                 }
                 
-                switch type {
-                case .classic, .vip, .child, .senior:
-                    manageForm { label, textField in
-                        if let type = LabelType(rawValue: label.text!) {
-                            switch type {
+                switch typeText {
+                case "Guest":
+                    if let guestType = GuestType(rawValue: subtypeText) {
+                        switch labelType {
+                        case .socialSecurityNumber, .projectNumber, .dateOfVisit:
+                            textField.setState(to: .disabled)
+                        default: break
+                        }
+                        
+                        if guestType != .season {
+                            switch labelType {
                             case .streetAddress, .city, .state, .zipCode:
-                                textField.disable()
-                            default:
-                                break
+                                textField.setState(to: .disabled)
+                            default: break
                             }
                         }
                     }
-                case .season:
-                    break
-                }
-            }
-        case "Employee":
-            manageForm { label, textField in
-                if let type = LabelType(rawValue: label.text!), type == .dateOfVisit {
-                    textField.disable()
-                }
-            }
-            
-            if let type = EmployeeType(rawValue: subtypeText), type != .contract {
-                manageForm { label, textField in
-                    if let type = LabelType(rawValue: label.text!), type == .projectNumber {
-                        textField.disable()
+                case "Employee":
+                    if let employeeType = EmployeeType(rawValue: subtypeText) {
+                        if (employeeType != .contract && labelType == .projectNumber) || labelType == .dateOfVisit {
+                            textField.setState(to: .disabled)
+                        }
                     }
-                }
-            }
-        case "Manager":
-            manageForm { label, textField in
-                if let type = LabelType(rawValue: label.text!), type == .projectNumber || type == .dateOfVisit {
-                    textField.disable()
-                }
-            }
-        case "Vendor":
-            manageForm { label, textField in
-                if let type = LabelType(rawValue: label.text!) {
-                    switch type {
+                case "Manager":
+                    if labelType == .projectNumber || labelType == .dateOfVisit {
+                        textField.setState(to: .disabled)
+                    }
+                case "Vendor":
+                    switch labelType {
                     case .socialSecurityNumber, .projectNumber, .streetAddress, .city, .state, .zipCode:
-                        textField.disable()
+                        textField.setState(to: .disabled)
                     case .companyName:
                         textField.text = subtypeText
-                    default:
-                        break
+                    default: break
                     }
+                default: break
                 }
             }
-        default:
-            break
         }
     }
     
     @IBAction func populateData() {
         manageForm { label, textField in
-            if typeIsSelected && subtypeIsSelected, textField.state != .disabled, let type = LabelType(rawValue: label.text!) {
+            if passTypeIsSelected, textField.state != .disabled, let type = LabelType(rawValue: label.text!) {
                 textField.text = LabelType.sampleText(for: type)
             }
         }
     }
     
     @IBAction func generatePass() {
-        if typeIsSelected && subtypeIsSelected {
-            let name = data[Keys.name] as? Name
-            let dateOfBirth = data[Keys.dateOfBirth] as? Date
-            let socialSecurityNumber = data[Keys.socialSecurityNumber] as? String
-            let address = data[Keys.address] as? Address
-            let projectNumber = data[Keys.projectNumber] as? Int
-            let dateOfVisit = data[Keys.dateOfVisit] as? Date
+        if passTypeIsSelected {
+            let name = data[.name] as? Name
+            let dateOfBirth = data[.dateOfBirth] as? Date
+            let socialSecurityNumber = data[.socialSecurityNumber] as? String
+            let address = data[.address] as? Address
+            let projectNumber = data[.projectNumber] as? Int
+            let dateOfVisit = data[.dateOfVisit] as? Date
             
             do {
                 switch typeText {
                 case "Guest":
                     if let type = GuestType(rawValue: subtypeText) {
-                        entrant = try Guest(name: name, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, type: type)
+                        entrant = try Guest(name: name, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, type: type)
                     }
                 case "Employee":
                     if let type = EmployeeType(rawValue: subtypeText) {
-                        entrant = try Employee(name: name, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, projectNumber: projectNumber, type: type)
+                        entrant = try Employee(name: name, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: projectNumber, type: type)
                     }
                 case "Manager":
                     if let type = ManagerType(rawValue: subtypeText) {
-                        entrant = try Manager(name: name, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, type: type)
+                        entrant = try Manager(name: name, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, type: type)
                     }
                 case "Vendor":
                     if let company = Company(rawValue: subtypeText) {
-                        entrant = try Vendor(name: name, address: address, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, company: company, dateOfVisit: dateOfVisit)
+                        entrant = try Vendor(name: name, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, dateOfVisit: dateOfVisit, company: company)
                     }
-                default:
-                    break
+                default: break
                 }
             } catch let error as FormError {
                 presentAlert(title: "Error", message: error.description)
             } catch {
                 fatalError()
             }
-        }
-        
-        if entrant == nil {
+        } else {
             presentAlert(title: "Error", message: "Select the type of pass you wish to generate.")
         }
     }
@@ -245,30 +209,11 @@ class FormController: UIViewController {
     func manageForm(_ closure: (UILabel, TextField) -> ()) {
         for stackView in formStackView.subviews {
             for view in stackView.subviews {
-                let label = view.subviews.first! as! UILabel
-                let textField = view.subviews.last! as! TextField
-                
-                closure(label, textField)
+                if let label = view.subviews.first! as? UILabel, let textField = view.subviews.last! as? TextField {
+                    closure(label, textField)
+                }
             }
         }
-    }
-    
-    func presentAlert(title: String?, message: String? = nil) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
-        let action = UIAlertAction(title: "OK", style: .default)
-        alertController.addAction(action)
-        
-        present(alertController, animated: true)
-    }
-    
-    struct Keys {
-        static let name = "name"
-        static let dateOfBirth = "dateOfBirth"
-        static let socialSecurityNumber = "socialSecurityNumber"
-        static let address = "address"
-        static let projectNumber = "projectNumber"
-        static let dateOfVisit = "dateOfVisit"
     }
     
 }

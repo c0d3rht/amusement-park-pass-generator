@@ -1,6 +1,6 @@
 import Foundation
 
-class Name: Equatable, CustomStringConvertible {
+struct Name: Equatable, CustomStringConvertible {
     let firstName: String
     let lastName: String
     

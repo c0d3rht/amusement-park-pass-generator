@@ -37,7 +37,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <action selector="showCategories" destination="BYZ-38-t0r" eventType="valueChanged" id="Q4y-7J-weJ"/>
+                                            <action selector="showCategories" destination="BYZ-38-t0r" eventType="valueChanged" id="WQD-Hd-05T"/>
                                         </connections>
                                     </segmentedControl>
                                 </subviews>

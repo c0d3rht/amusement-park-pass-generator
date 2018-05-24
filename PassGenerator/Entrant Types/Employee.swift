@@ -21,7 +21,7 @@ class Employee: Passable {
     let projectNumber: Int?
     let type: EmployeeType
     
-    init(name: Name?, address: Address?, dateOfBirth: Date?, socialSecurityNumber: String?, projectNumber: Int?, type: EmployeeType) throws {
+    init(name: Name?, dateOfBirth: Date?, socialSecurityNumber: String?, address: Address?, projectNumber: Int?, type: EmployeeType) throws {
         guard let name = name, !name.isIncomplete else {
             throw FormError.invalidName("Your name is incomplete.")
         }
@@ -30,7 +30,7 @@ class Employee: Passable {
             throw FormError.invalidName("Your name contains special characters.")
         }
         
-        guard dateOfBirth != nil else {
+        guard let date = dateOfBirth else {
             throw FormError.invalidDate("Your birth date is not in the correct format.")
         }
         
@@ -53,9 +53,9 @@ class Employee: Passable {
         }
         
         self.name = name
+        self.dateOfBirth = date
+        self.socialSecurityNumber = string
         self.address = address
-        self.dateOfBirth = dateOfBirth
-        self.socialSecurityNumber = socialSecurityNumber
         self.projectNumber = projectNumber
         self.type = type
     }

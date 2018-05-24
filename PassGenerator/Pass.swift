@@ -14,18 +14,44 @@ class Pass: CustomStringConvertible {
     var accessibleAreas: [AccessibleArea] {
         switch entrant {
         case is Employee:
-            switch (entrant as! Employee).type {
-            case .food, .contract:
+            let employee = entrant as! Employee
+            
+            switch employee.type {
+            case .food:
                 return [.amusement, .kitchen]
             case .ride:
                 return [.amusement, .rideControl]
             case .maintenance:
                 return [.amusement, .kitchen, .rideControl, .maintenance]
+            case .contract:
+                switch employee.projectNumber {
+                case 1001:
+                    return [.amusement, .rideControl]
+                case 1002:
+                    return [.amusement, .rideControl, .maintenance]
+                case 1003:
+                    return [.amusement, .kitchen, .rideControl, .maintenance, .office]
+                case 2001:
+                    return [.office]
+                case 2002:
+                    return [.kitchen, .maintenance]
+                default:
+                    return []
+                }
             }
         case is Manager:
             return [.amusement, .kitchen, .rideControl, .maintenance, .office]
         case is Vendor:
-            return [.amusement, .kitchen]
+            switch (entrant as! Vendor).company {
+            case .acme:
+                return [.kitchen]
+            case .orkin:
+                return [.amusement, .kitchen, .rideControl]
+            case .fedex:
+                return [.maintenance, .office]
+            case .nw:
+                return [.amusement, .kitchen, .rideControl, .maintenance, .office]
+            }
         case is Guest:
             return [.amusement]
         default:
@@ -49,6 +75,8 @@ class Pass: CustomStringConvertible {
         }
     }
     
+    typealias Discount = (food: Int, merchandise: Int)
+    
     var discount: Discount? {
         switch entrant {
         case is Guest:
@@ -69,7 +97,8 @@ class Pass: CustomStringConvertible {
         }
     }
     
-    let messageDuration = 5.0
+    private let messageDuration = 5.0
+    
     var lastTimeSwiped: Date? = nil {
         didSet {
             if let previousDate = oldValue, let existingDate = lastTimeSwiped, existingDate < previousDate.addingTimeInterval(messageDuration) {
@@ -139,4 +168,3 @@ class Pass: CustomStringConvertible {
     }
     
 }
-

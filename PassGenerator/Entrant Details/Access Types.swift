@@ -14,5 +14,3 @@ enum RideAccess: String, AccessType {
     case allRides = "All Rides"
     case skipQueues = "Skip Queues"
 }
-
-typealias Discount = (food: Int, merchandise: Int)

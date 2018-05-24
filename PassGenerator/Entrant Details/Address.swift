@@ -1,24 +1,24 @@
 import Foundation
 
-class Address: Equatable, CustomStringConvertible {
+struct Address: Equatable, CustomStringConvertible {
     let street: String
     let city: String
     let state: String
-    let zipCode: Int
+    let zipCode: String
     
     var isIncomplete: Bool {
         return street.isEmpty || city.isEmpty || state.isEmpty
     }
     
     var containsSpecialCharacters: Bool {
-        return city.rangeOfCharacter(from: .decimalDigits) != nil || state.rangeOfCharacter(from: .decimalDigits) != nil
+        return city.rangeOfCharacter(from: .decimalDigits) != nil || state.rangeOfCharacter(from: .decimalDigits) != nil || zipCode.rangeOfCharacter(from: .decimalDigits) == nil
     }
     
     var description: String {
         return "\(street), \(city), \(state) - \(zipCode)"
     }
     
-    init(street: String, city: String, state: String, zipCode: Int) {
+    init(street: String, city: String, state: String, zipCode: String) {
         self.street = street
         self.city = city
         self.state = state

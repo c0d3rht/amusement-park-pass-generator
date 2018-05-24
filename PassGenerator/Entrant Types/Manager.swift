@@ -19,7 +19,7 @@ class Manager: Passable {
     var socialSecurityNumber: String?
     let type: ManagerType
     
-    init(name: Name?, address: Address?, dateOfBirth: Date?, socialSecurityNumber: String?, type: ManagerType) throws {
+    init(name: Name?, dateOfBirth: Date?, socialSecurityNumber: String?, address: Address?, type: ManagerType) throws {
         guard let name = name, !name.isIncomplete else {
             throw FormError.invalidName("Your name is incomplete.")
         }
@@ -28,11 +28,11 @@ class Manager: Passable {
             throw FormError.invalidName("Your name contains special characters.")
         }
         
-        guard dateOfBirth != nil else {
+        guard let date = dateOfBirth else {
             throw FormError.invalidDate("Your birth date is not in the correct format.")
         }
         
-        guard let string = socialSecurityNumber, Manager.isValidSSN(string) else {
+        guard let string = socialSecurityNumber, Employee.isValidSSN(string) else {
             throw FormError.invalidNumber("Your social security number is not in the correct format.")
         }
         
@@ -45,9 +45,9 @@ class Manager: Passable {
         }
         
         self.name = name
+        self.dateOfBirth = date
+        self.socialSecurityNumber = string
         self.address = address
-        self.dateOfBirth = dateOfBirth
-        self.socialSecurityNumber = socialSecurityNumber
         self.type = type
     }
     

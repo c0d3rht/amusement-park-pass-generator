@@ -109,8 +109,8 @@ class PassController: UIViewController, PassDelegate {
         dateFormatter.dateFormat = "dd LLLL"
         
         if let dateOfBirth = pass?.entrant.dateOfBirth, dateFormatter.string(from: Date()) == dateFormatter.string(from: dateOfBirth) {
-            Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) {_ in 
-                self.presentAlert(title: "Happy Birthday!", message: "OK")
+            DispatchQueue.main.async {
+                self.presentAlert(title: "Happy Birthday!", actionTitle: "Dismiss")
             }
         }
         
@@ -131,15 +131,6 @@ class PassController: UIViewController, PassDelegate {
     
     func processingTimeDidElapse() {
         displayMessage("Press an option", textColor: UIColor(red: 0, green: 0, blue: 0, alpha: 0.35), backgroundColor: .white)
-    }
-    
-    func presentAlert(title: String?, message: String? = nil) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
-        let action = UIAlertAction(title: "OK", style: .default)
-        alertController.addAction(action)
-        
-        present(alertController, animated: true)
     }
 
 }

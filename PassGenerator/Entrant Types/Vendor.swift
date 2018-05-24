@@ -21,8 +21,8 @@ class Vendor: Passable {
     let company: Company
     let dateOfVisit: Date?
     
-    init(name: Name?, address: Address?, dateOfBirth: Date?, socialSecurityNumber: String?, company: Company, dateOfVisit: Date?) throws {
-        guard dateOfBirth != nil else {
+    init(name: Name?, dateOfBirth: Date?, socialSecurityNumber: String?, address: Address?, dateOfVisit: Date?, company: Company) throws {
+        guard let date = dateOfBirth else {
             throw FormError.invalidDate("Your birth date is not in the correct format.")
         }
         
@@ -32,7 +32,7 @@ class Vendor: Passable {
         
         self.name = name
         self.address = address
-        self.dateOfBirth = dateOfBirth
+        self.dateOfBirth = date
         self.socialSecurityNumber = socialSecurityNumber
         self.company = company
         self.dateOfVisit = dateOfVisit

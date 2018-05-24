@@ -1,6 +1,7 @@
 import AudioToolbox
 
 class SoundEffectsPlayer {
+    
     var sound: SystemSoundID = 0
     var soundEffectName = ""
     var soundEffectURL: URL {

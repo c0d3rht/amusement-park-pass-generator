@@ -21,34 +21,38 @@ class Guest: Passable {
     var socialSecurityNumber: String?
     let type: GuestType
     
-    init(name: Name?, address: Address?, dateOfBirth: Date?, socialSecurityNumber: String?, type: GuestType) throws {
-        if type == .season || type == .senior {
-            guard let name = name, !name.isIncomplete else {
-                throw FormError.invalidName("Your name is incomplete.")
-            }
-            
-            guard !name.containsSpecialCharacters else {
-                throw FormError.invalidName("Your name contains special characters.")
-            }
-            
-            if type == .season {
-                guard let address = address, !address.isIncomplete else {
-                    throw FormError.invalidAddress("Your address is incomplete.")
+    init(name: Name?, dateOfBirth: Date?, socialSecurityNumber: String?, address: Address?, type: GuestType) throws {
+        if type == .child || type == .season || type == .senior {
+            if type == .season || type == .senior {
+                guard let name = name, !name.isIncomplete else {
+                    throw FormError.invalidName("Your name is incomplete.")
                 }
                 
-                guard !address.containsSpecialCharacters else {
-                    throw FormError.invalidAddress("Your address consists of invalid characters.")
+                guard !name.containsSpecialCharacters else {
+                    throw FormError.invalidName("Your name contains special characters.")
+                }
+                
+                if type == .season {
+                    guard let address = address, !address.isIncomplete else {
+                        throw FormError.invalidAddress("Your address is incomplete.")
+                    }
+                    
+                    guard !address.containsSpecialCharacters else {
+                        throw FormError.invalidAddress("Your address consists of invalid characters.")
+                    }
                 }
             }
-        }
-        
-        if type == .child || type == .season || type == .senior {
+            
             guard let date = dateOfBirth else {
                 throw FormError.invalidDate("Your birth date is not in the correct format.")
             }
             
             if type == .child {
-                guard abs(date.timeIntervalSinceNow) < 157680000 else {
+                guard date.compare(years: 5) == .orderedAscending else {
+                    throw FormError.invalidDate("Your child is over the age of 5 years.")
+                }
+            } else if type == .senior {
+                guard date.compare(years: 65) == .orderedDescending else {
                     throw FormError.invalidDate("Your child is over the age of 5 years.")
                 }
             }
