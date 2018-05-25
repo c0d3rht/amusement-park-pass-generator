@@ -40,7 +40,7 @@ class Manager: Passable {
             }
         }
         
-        guard let string = socialSecurityNumber, Employee.isValidSSN(string) else {
+        guard let string = Employee.extractSSN(from: socialSecurityNumber) else {
             throw FormError.invalidSocialSecurityNumber("Your social security number is not in the correct format.")
         }
         

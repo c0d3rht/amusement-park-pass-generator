@@ -7,7 +7,6 @@ class PassGeneratorTests: XCTestCase {
     var address: Address!
     var socialSecurityNumber: String!
     var dateOfBirth: Date!
-    var projectNumber: Int!
     var dateOfVisit: Date!
     
     var pass: Pass!
@@ -20,7 +19,6 @@ class PassGeneratorTests: XCTestCase {
         address = Address(street: "1 Infinite Loop", city: "Cupertino", state: "California", zipCode: "95014")
         socialSecurityNumber = " 123    45     -   6789   "
         dateOfBirth = Date(timeIntervalSince1970: 956620800000)
-        projectNumber = 1001
         dateOfVisit = Date()
         
         dateFormatter = TestDateFormatter()
@@ -33,7 +31,6 @@ class PassGeneratorTests: XCTestCase {
         address = nil
         socialSecurityNumber = nil
         dateOfBirth = nil
-        projectNumber = nil
         dateOfVisit = nil
         
         pass = nil
@@ -112,28 +109,28 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.discount == nil)
     }
     
-    func testSeniorGuest() {
-        handleErrors {
-            pass = Pass(contentsOf: try Guest(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, type: .senior))
-        }
-        
-        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.amusement))
-        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.kitchen))
-        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.rideControl))
-        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.maintenance))
-        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.office))
-        
-        XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
-        XCTAssertTrue(pass.hasAccess(to: RideAccess.skipQueues))
-        
-        XCTAssertFalse(pass.discount == nil)
-    }
+//    func testSeniorGuest() {
+//        handleErrors {
+//            pass = Pass(contentsOf: try Guest(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, type: .senior))
+//        }
+//
+//        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.amusement))
+//        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.kitchen))
+//        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.rideControl))
+//        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.maintenance))
+//        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.office))
+//
+//        XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
+//        XCTAssertTrue(pass.hasAccess(to: RideAccess.skipQueues))
+//
+//        XCTAssertFalse(pass.discount == nil)
+//    }
     
     // MARK: - Tests on Employee Types
     
     func testFoodEmployee() {
         handleErrors {
-            pass = Pass(contentsOf: try Employee(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: projectNumber, type: .food))
+            pass = Pass(contentsOf: try Employee(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: nil, type: .food))
         }
         
         XCTAssertTrue(pass.hasAccess(to: AccessibleArea.amusement))
@@ -150,7 +147,7 @@ class PassGeneratorTests: XCTestCase {
     
     func testRideEmployee() {
         handleErrors {
-            pass = Pass(contentsOf: try Employee(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: projectNumber, type: .ride))
+            pass = Pass(contentsOf: try Employee(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: nil, type: .ride))
         }
         
         XCTAssertTrue(pass.hasAccess(to: AccessibleArea.amusement))
@@ -167,7 +164,7 @@ class PassGeneratorTests: XCTestCase {
     
     func testMaintenanceEmployee() {
         handleErrors {
-            pass = Pass(contentsOf: try Employee(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: projectNumber, type: .maintenance))
+            pass = Pass(contentsOf: try Employee(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: nil, type: .maintenance))
         }
         
         XCTAssertTrue(pass.hasAccess(to: AccessibleArea.amusement))
@@ -182,21 +179,89 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.discount == nil)
     }
 
-    func testContractEmployee() {
+    func testContractEmployee1001() {
         handleErrors {
-            pass = Pass(contentsOf: try Employee(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: projectNumber, type: .contract))
+            pass = Pass(contentsOf: try Employee(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: 1001, type: .contract))
         }
 
         XCTAssertTrue(pass.hasAccess(to: AccessibleArea.amusement))
-        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.kitchen))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.kitchen))
         XCTAssertTrue(pass.hasAccess(to: AccessibleArea.rideControl))
         XCTAssertFalse(pass.hasAccess(to: AccessibleArea.maintenance))
         XCTAssertFalse(pass.hasAccess(to: AccessibleArea.office))
 
-        XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
 
-        XCTAssertFalse(pass.discount == nil)
+        XCTAssertTrue(pass.discount == nil)
+    }
+    
+    func testContractEmployee1002() {
+        handleErrors {
+            pass = Pass(contentsOf: try Employee(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: 1002, type: .contract))
+        }
+        
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.amusement))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.kitchen))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.rideControl))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.maintenance))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.office))
+        
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
+        
+        XCTAssertTrue(pass.discount == nil)
+    }
+    
+    func testContractEmployee1003() {
+        handleErrors {
+            pass = Pass(contentsOf: try Employee(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: 1003, type: .contract))
+        }
+        
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.amusement))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.kitchen))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.rideControl))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.maintenance))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.office))
+        
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
+        
+        XCTAssertTrue(pass.discount == nil)
+    }
+    
+    func testContractEmployee2001() {
+        handleErrors {
+            pass = Pass(contentsOf: try Employee(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: 2001, type: .contract))
+        }
+        
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.amusement))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.kitchen))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.rideControl))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.maintenance))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.office))
+        
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
+        
+        XCTAssertTrue(pass.discount == nil)
+    }
+    
+    func testContractEmployee2002() {
+        handleErrors {
+            pass = Pass(contentsOf: try Employee(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: 2002, type: .contract))
+        }
+        
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.amusement))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.kitchen))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.rideControl))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.maintenance))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.office))
+        
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
+        
+        XCTAssertTrue(pass.discount == nil)
     }
 
     // MARK: - Tests on Manager Type(s)
@@ -217,6 +282,76 @@ class PassGeneratorTests: XCTestCase {
 
         XCTAssertFalse(pass.discount == nil)
     }
+    
+    // MARK: - Tests on Vendor Types
+    
+    func testVendorACME() {
+        handleErrors {
+            pass = Pass(contentsOf: try Vendor(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, dateOfVisit: dateOfVisit, company: .acme))
+        }
+        
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.amusement))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.kitchen))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.rideControl))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.maintenance))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.office))
+        
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
+        
+        XCTAssertTrue(pass.discount == nil)
+    }
+    
+    func testVendorOrkin() {
+        handleErrors {
+            pass = Pass(contentsOf: try Vendor(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, dateOfVisit: dateOfVisit, company: .orkin))
+        }
+        
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.amusement))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.kitchen))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.rideControl))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.maintenance))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.office))
+        
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
+        
+        XCTAssertTrue(pass.discount == nil)
+    }
+    
+    func testVendorFedex() {
+        handleErrors {
+            pass = Pass(contentsOf: try Vendor(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, dateOfVisit: dateOfVisit, company: .fedex))
+        }
+        
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.amusement))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.kitchen))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.rideControl))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.maintenance))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.office))
+        
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
+        
+        XCTAssertTrue(pass.discount == nil)
+    }
+    
+    func testVendorNWElectrical() {
+        handleErrors {
+            pass = Pass(contentsOf: try Vendor(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, dateOfVisit: dateOfVisit, company: .nwElectrical))
+        }
+        
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.amusement))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.kitchen))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.rideControl))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.maintenance))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.office))
+        
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
+        
+        XCTAssertTrue(pass.discount == nil)
+    }
 
     // MARK: - Tests for Accessibility
 
@@ -235,7 +370,7 @@ class PassGeneratorTests: XCTestCase {
             pass.lastTimeSwiped = date.addingTimeInterval(3)
             pass.swipe(for: AccessibleArea.amusement) // Processing Time Has Not Elapsed Yet
             
-            XCTAssertFalse(pass.lastTimeSwiped! == date.addingTimeInterval(3))
+            XCTAssertTrue(pass.lastTimeSwiped! != date.addingTimeInterval(3))
         }
         
     }

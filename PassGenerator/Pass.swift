@@ -49,7 +49,7 @@ class Pass: CustomStringConvertible {
                 return [.amusement, .kitchen, .rideControl]
             case .fedex:
                 return [.maintenance, .office]
-            case .nw:
+            case .nwElectrical:
                 return [.amusement, .kitchen, .rideControl, .maintenance, .office]
             }
         case is Guest:
@@ -159,6 +159,10 @@ class Pass: CustomStringConvertible {
                 }
             } else {
                 delegate?.didSwipeDuringProcessingTime(seconds: Pass.processingDuration)
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + Pass.processingDuration) {
+                self.delegate?.processingTimeDidElapse()
             }
         }
     }

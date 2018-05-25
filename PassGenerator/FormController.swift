@@ -6,13 +6,14 @@ class FormController: UIViewController {
         case name, dateOfBirth, address, socialSecurityNumber, projectNumber, dateOfVisit
     }
     
-    // MARK: - Views
+    // MARK: - Views and Constraints
     
     @IBOutlet weak var typeSegmentedControl: SegmentedControl!
     @IBOutlet weak var subtypeSegmentedControl: SegmentedControl!
     @IBOutlet weak var formStackView: UIStackView!
     
-    @IBOutlet weak var actionContainerBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var actionContainer: UIView!
+    @IBOutlet weak var actionContainerTopConstraint: NSLayoutConstraint!
     
     let datePicker = UIDatePicker()
     let projectNumberPicker = UIPickerView()

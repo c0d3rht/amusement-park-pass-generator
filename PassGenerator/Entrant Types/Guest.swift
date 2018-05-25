@@ -54,7 +54,7 @@ class Guest: Passable {
                 guard Guest.isChild(dateOfBirth: date) else {
                     throw FormError.invalidDate("Your child is over the age of 5 years.")
                 }
-            } else if Guest.isSenior(dateOfBirth: date) {
+            } else if type == .senior {
                 guard Guest.isSenior(dateOfBirth: date) else {
                     throw FormError.invalidDate("You cannot apply to be a senior guest.")
                 }

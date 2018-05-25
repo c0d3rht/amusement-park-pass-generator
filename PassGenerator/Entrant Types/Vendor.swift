@@ -4,12 +4,12 @@ enum Company: String {
     case acme = "ACME"
     case orkin = "Orkin"
     case fedex = "FedEx"
-    case nw = "NW Electrical"
+    case nwElectrical = "NW Electrical"
 }
 
 extension Company {
     static func all() -> [String] {
-        return [Company.acme.rawValue, Company.orkin.rawValue, Company.fedex.rawValue, Company.nw.rawValue]
+        return [Company.acme.rawValue, Company.orkin.rawValue, Company.fedex.rawValue, Company.nwElectrical.rawValue]
     }
 }
 

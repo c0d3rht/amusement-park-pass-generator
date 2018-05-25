@@ -63,23 +63,13 @@ class PassController: UIViewController, PassDelegate {
         }
     }
     
-    @IBAction func validateAreaAccess(_ sender: UIButton) {
-        if let text = sender.currentTitle, let area = AccessibleArea(rawValue: text) {
-            pass?.swipe(for: area)
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + Pass.processingDuration) {
-                self.processingTimeDidElapse()
+    @IBAction func validateAccess(_ sender: UIButton) {
+        if let text = sender.currentTitle {
+            if let area = AccessibleArea(rawValue: text) {
+                pass?.swipe(for: area)
+            } else if let type = RideAccess(rawValue: text) {
+                pass?.swipe(for: type)
             }
-        }
-    }
-    
-    @IBAction func validateRideAccess(_ sender: UIButton) {
-        if let text = sender.currentTitle, let type = RideAccess(rawValue: text) {
-            pass?.swipe(for: type)
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + Pass.processingDuration) {
-            self.processingTimeDidElapse()
         }
     }
     
@@ -100,7 +90,9 @@ class PassController: UIViewController, PassDelegate {
             
             self.displayMessage(text, textColor: .white, backgroundColor: backgroundColor)
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: self.processingTimeDidElapse)
+            DispatchQueue.main.asyncAfter(deadline: .now() + Pass.processingDuration) {
+                self.processingTimeDidElapse()
+            }
         }
     }
     
@@ -144,5 +136,4 @@ class PassController: UIViewController, PassDelegate {
     func processingTimeDidElapse() {
         displayMessage("Press an option", textColor: UIColor(red: 0, green: 0, blue: 0, alpha: 0.35), backgroundColor: .white)
     }
-
 }

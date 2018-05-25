@@ -234,11 +234,11 @@ extension FormController: UITextFieldDelegate, UIPickerViewDelegate, UIPickerVie
             case .lastName:
                 return "Doe"
             case .dateOfBirth:
-                return "04 / 25 / 2000"
+                return "08 / 07 / 1975"
             case .socialSecurityNumber:
                 return "123-45-6789"
             case .projectNumber:
-                return "1001"
+                return "2002"
             case .dateOfVisit:
                 return "04 / 25 / 2018"
             case .streetAddress:
@@ -321,20 +321,14 @@ extension FormController: UITextFieldDelegate, UIPickerViewDelegate, UIPickerVie
     @objc func keyboardWillShow(_ notification: Notification) {
         if let info = notification.userInfo, let keyboardFrame = info[UIKeyboardFrameEndUserInfoKey] as? NSValue {
             let frame = keyboardFrame.cgRectValue
-            actionContainerBottomConstraint.constant = frame.size.height
-            
-            UIView.animate(withDuration: 0.8, animations: {
-                self.view.layoutIfNeeded()
-            })
+            actionContainerTopConstraint.constant = frame.size.height - actionContainer.frame.height
+            view.layoutIfNeeded()
         }
     }
     
     @objc func keyboardWillHide(_ notification: Notification) {
-        actionContainerBottomConstraint.constant = 0
-        
-        UIView.animate(withDuration: 0.8, animations: {
-            self.view.layoutIfNeeded()
-        })
+        actionContainerTopConstraint.constant = 0
+        view.layoutIfNeeded()
     }
     
 }
