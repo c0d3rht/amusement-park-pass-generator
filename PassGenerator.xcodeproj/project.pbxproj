@@ -8,19 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		B52500F620930F1300C86168 /* Pass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52500F520930F1300C86168 /* Pass.swift */; };
-		B52500FA20932D4C00C86168 /* Pass Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52500F920932D4C00C86168 /* Pass Details.swift */; };
 		B5341F1E20877736005F2283 /* Passable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5341F1D20877736005F2283 /* Passable.swift */; };
 		B5341F2020877820005F2283 /* Guest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5341F1F20877820005F2283 /* Guest.swift */; };
 		B5341F222087784C005F2283 /* Employee.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5341F212087784C005F2283 /* Employee.swift */; };
 		B5341F2420877940005F2283 /* Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5341F2320877940005F2283 /* Name.swift */; };
 		B5341F262087795D005F2283 /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5341F252087795D005F2283 /* Address.swift */; };
 		B53688A0208A0D02000360B1 /* PassGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B536889F208A0D02000360B1 /* PassGeneratorTests.swift */; };
+		B54A921420ADB4DB00A47E47 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54A921320ADB4DB00A47E47 /* Audio.swift */; };
+		B54A921820ADB5AF00A47E47 /* AccessDenied.wav in Resources */ = {isa = PBXBuildFile; fileRef = B54A921620ADB5AF00A47E47 /* AccessDenied.wav */; };
+		B54A921920ADB5AF00A47E47 /* AccessGranted.wav in Resources */ = {isa = PBXBuildFile; fileRef = B54A921720ADB5AF00A47E47 /* AccessGranted.wav */; };
+		B551EC1B20B5C59800FD8061 /* Access Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = B551EC1A20B5C59800FD8061 /* Access Types.swift */; };
 		B5A6347B207F896700F71C80 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A6347A207F896700F71C80 /* AppDelegate.swift */; };
 		B5A6347D207F896700F71C80 /* FormController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A6347C207F896700F71C80 /* FormController.swift */; };
 		B5A63480207F896700F71C80 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5A6347E207F896700F71C80 /* Main.storyboard */; };
 		B5A63482207F896900F71C80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5A63481207F896900F71C80 /* Assets.xcassets */; };
 		B5A63485207F896900F71C80 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5A63483207F896900F71C80 /* LaunchScreen.storyboard */; };
 		B5A6348D207F89A400F71C80 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A6348C207F89A400F71C80 /* Manager.swift */; };
+		B5C948CE209B6E25004A8A47 /* PassController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C948CD209B6E25004A8A47 /* PassController.swift */; };
+		B5DEA6CC2095FDCE0051980D /* Vendor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DEA6CB2095FDCE0051980D /* Vendor.swift */; };
 		B5F781582089EBE300FD9E15 /* UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F781572089EBE300FD9E15 /* UI.swift */; };
 /* End PBXBuildFile section */
 
@@ -36,7 +41,6 @@
 
 /* Begin PBXFileReference section */
 		B52500F520930F1300C86168 /* Pass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pass.swift; sourceTree = "<group>"; };
-		B52500F920932D4C00C86168 /* Pass Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pass Details.swift"; sourceTree = "<group>"; };
 		B5341F1D20877736005F2283 /* Passable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Passable.swift; sourceTree = "<group>"; };
 		B5341F1F20877820005F2283 /* Guest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Guest.swift; sourceTree = "<group>"; };
 		B5341F212087784C005F2283 /* Employee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Employee.swift; sourceTree = "<group>"; };
@@ -45,6 +49,10 @@
 		B536889D208A0D02000360B1 /* PassGeneratorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PassGeneratorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B536889F208A0D02000360B1 /* PassGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassGeneratorTests.swift; sourceTree = "<group>"; };
 		B53688A1208A0D02000360B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B54A921320ADB4DB00A47E47 /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
+		B54A921620ADB5AF00A47E47 /* AccessDenied.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = AccessDenied.wav; sourceTree = "<group>"; };
+		B54A921720ADB5AF00A47E47 /* AccessGranted.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = AccessGranted.wav; sourceTree = "<group>"; };
+		B551EC1A20B5C59800FD8061 /* Access Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Access Types.swift"; sourceTree = "<group>"; };
 		B5A63477207F896700F71C80 /* PassGenerator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PassGenerator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5A6347A207F896700F71C80 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B5A6347C207F896700F71C80 /* FormController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormController.swift; sourceTree = "<group>"; };
@@ -53,6 +61,8 @@
 		B5A63484207F896900F71C80 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B5A63486207F896900F71C80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5A6348C207F89A400F71C80 /* Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
+		B5C948CD209B6E25004A8A47 /* PassController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassController.swift; sourceTree = "<group>"; };
+		B5DEA6CB2095FDCE0051980D /* Vendor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vendor.swift; sourceTree = "<group>"; };
 		B5F781572089EBE300FD9E15 /* UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,24 +84,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B52500F72093213800C86168 /* Visitor Details */ = {
+		B52500F72093213800C86168 /* Entrant Details */ = {
 			isa = PBXGroup;
 			children = (
+				B5341F1D20877736005F2283 /* Passable.swift */,
 				B5341F2320877940005F2283 /* Name.swift */,
 				B5341F252087795D005F2283 /* Address.swift */,
-				B5341F1D20877736005F2283 /* Passable.swift */,
+				B551EC1A20B5C59800FD8061 /* Access Types.swift */,
 			);
-			path = "Visitor Details";
+			path = "Entrant Details";
 			sourceTree = "<group>";
 		};
-		B52500F82093215000C86168 /* Visitor Types */ = {
+		B52500F82093215000C86168 /* Entrant Types */ = {
 			isa = PBXGroup;
 			children = (
 				B5341F1F20877820005F2283 /* Guest.swift */,
 				B5341F212087784C005F2283 /* Employee.swift */,
 				B5A6348C207F89A400F71C80 /* Manager.swift */,
+				B5DEA6CB2095FDCE0051980D /* Vendor.swift */,
 			);
-			path = "Visitor Types";
+			path = "Entrant Types";
 			sourceTree = "<group>";
 		};
 		B536889E208A0D02000360B1 /* PassGeneratorTests */ = {
@@ -101,6 +113,15 @@
 				B53688A1208A0D02000360B1 /* Info.plist */,
 			);
 			path = PassGeneratorTests;
+			sourceTree = "<group>";
+		};
+		B54A921520ADB59000A47E47 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B54A921620ADB5AF00A47E47 /* AccessDenied.wav */,
+				B54A921720ADB5AF00A47E47 /* AccessGranted.wav */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		B5A6346E207F896700F71C80 = {
@@ -126,15 +147,17 @@
 			children = (
 				B5A6347A207F896700F71C80 /* AppDelegate.swift */,
 				B5A6347C207F896700F71C80 /* FormController.swift */,
+				B5C948CD209B6E25004A8A47 /* PassController.swift */,
 				B5A6347E207F896700F71C80 /* Main.storyboard */,
-				B5A63481207F896900F71C80 /* Assets.xcassets */,
 				B5A63483207F896900F71C80 /* LaunchScreen.storyboard */,
+				B5A63481207F896900F71C80 /* Assets.xcassets */,
 				B5A63486207F896900F71C80 /* Info.plist */,
-				B52500F72093213800C86168 /* Visitor Details */,
-				B52500F82093215000C86168 /* Visitor Types */,
+				B54A921520ADB59000A47E47 /* Resources */,
+				B52500F72093213800C86168 /* Entrant Details */,
+				B52500F82093215000C86168 /* Entrant Types */,
 				B52500F520930F1300C86168 /* Pass.swift */,
-				B52500F920932D4C00C86168 /* Pass Details.swift */,
 				B5F781572089EBE300FD9E15 /* UI.swift */,
+				B54A921320ADB4DB00A47E47 /* Audio.swift */,
 			);
 			path = PassGenerator;
 			sourceTree = "<group>";
@@ -228,8 +251,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5A63485207F896900F71C80 /* LaunchScreen.storyboard in Resources */,
+				B54A921920ADB5AF00A47E47 /* AccessGranted.wav in Resources */,
 				B5A63482207F896900F71C80 /* Assets.xcassets in Resources */,
 				B5A63480207F896700F71C80 /* Main.storyboard in Resources */,
+				B54A921820ADB5AF00A47E47 /* AccessDenied.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,12 +276,15 @@
 				B5341F2020877820005F2283 /* Guest.swift in Sources */,
 				B5341F222087784C005F2283 /* Employee.swift in Sources */,
 				B5F781582089EBE300FD9E15 /* UI.swift in Sources */,
+				B551EC1B20B5C59800FD8061 /* Access Types.swift in Sources */,
 				B5341F1E20877736005F2283 /* Passable.swift in Sources */,
 				B5A6347D207F896700F71C80 /* FormController.swift in Sources */,
 				B5A6348D207F89A400F71C80 /* Manager.swift in Sources */,
-				B52500FA20932D4C00C86168 /* Pass Details.swift in Sources */,
+				B54A921420ADB4DB00A47E47 /* Audio.swift in Sources */,
 				B5341F2420877940005F2283 /* Name.swift in Sources */,
+				B5C948CE209B6E25004A8A47 /* PassController.swift in Sources */,
 				B5341F262087795D005F2283 /* Address.swift in Sources */,
+				B5DEA6CC2095FDCE0051980D /* Vendor.swift in Sources */,
 				B52500F620930F1300C86168 /* Pass.swift in Sources */,
 				B5A6347B207F896700F71C80 /* AppDelegate.swift in Sources */,
 			);
