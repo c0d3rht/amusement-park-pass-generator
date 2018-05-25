@@ -1,6 +1,6 @@
 import Foundation
 
-struct Name: Equatable, CustomStringConvertible {
+struct Name: CustomStringConvertible {
     let firstName: String
     let lastName: String
     
@@ -19,9 +19,5 @@ struct Name: Equatable, CustomStringConvertible {
     init(_ firstName: String, _ lastName: String) {
         self.firstName = firstName
         self.lastName = lastName
-    }
-    
-    static func == (lhs: Name, rhs: Name) -> Bool {
-        return lhs.description == rhs.description
     }
 }

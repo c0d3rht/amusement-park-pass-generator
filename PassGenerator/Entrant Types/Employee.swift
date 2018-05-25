@@ -21,7 +21,11 @@ class Employee: Passable {
     let projectNumber: Int?
     let type: EmployeeType
     
+    static let registeredProjectNumbers = [1001, 1002, 1003, 2001, 2002]
+    
     init(name: Name?, dateOfBirth: Date?, socialSecurityNumber: String?, address: Address?, projectNumber: Int?, type: EmployeeType) throws {
+        self.type = type
+        
         guard let name = name, !name.isIncomplete else {
             throw FormError.invalidName("Your name is incomplete.")
         }
@@ -35,7 +39,7 @@ class Employee: Passable {
         }
         
         guard let string = socialSecurityNumber, Employee.isValidSSN(string) else {
-            throw FormError.invalidNumber("Your social security number is not in the correct format.")
+            throw FormError.invalidSocialSecurityNumber("Your social security number is not in the correct format.")
         }
         
         guard let address = address, !address.isIncomplete else {
@@ -47,8 +51,8 @@ class Employee: Passable {
         }
         
         if type == .contract {
-            guard projectNumber != nil else {
-                throw FormError.invalidNumber("Your project is not listed in our database.")
+            guard let number = projectNumber, Employee.registeredProjectNumbers.contains(number) else {
+                throw FormError.invalidProjectNumber("Your project is not listed in our database.")
             }
         }
         
@@ -57,7 +61,6 @@ class Employee: Passable {
         self.socialSecurityNumber = string
         self.address = address
         self.projectNumber = projectNumber
-        self.type = type
     }
     
 }

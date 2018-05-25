@@ -627,6 +627,7 @@
                     </view>
                     <size key="freeformSize" width="834" height="1225"/>
                     <connections>
+                        <outlet property="actionContainerBottomConstraint" destination="nMU-63-74O" id="Sg3-Vh-wSx"/>
                         <outlet property="formStackView" destination="lGt-Pz-qxn" id="IXb-Th-C9Y"/>
                         <outlet property="subtypeSegmentedControl" destination="1rl-SI-l8L" id="9AK-F7-W8y"/>
                         <outlet property="typeSegmentedControl" destination="cSp-MW-wKO" id="UJH-a0-Sgg"/>

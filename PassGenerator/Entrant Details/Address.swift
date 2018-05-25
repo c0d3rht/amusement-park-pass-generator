@@ -1,6 +1,6 @@
 import Foundation
 
-struct Address: Equatable, CustomStringConvertible {
+struct Address: CustomStringConvertible {
     let street: String
     let city: String
     let state: String
@@ -23,9 +23,5 @@ struct Address: Equatable, CustomStringConvertible {
         self.city = city
         self.state = state
         self.zipCode = zipCode
-    }
-    
-    static func == (lhs: Address, rhs: Address) -> Bool {
-        return lhs.description == rhs.description
     }
 }

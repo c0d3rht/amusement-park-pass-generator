@@ -12,6 +12,11 @@ class FormController: UIViewController {
     @IBOutlet weak var subtypeSegmentedControl: SegmentedControl!
     @IBOutlet weak var formStackView: UIStackView!
     
+    @IBOutlet weak var actionContainerBottomConstraint: NSLayoutConstraint!
+    
+    let datePicker = UIDatePicker()
+    let projectNumberPicker = UIPickerView()
+    
     // MARK: - Local Variables, Constants and Computed Properties
     
     var typeText: String {
@@ -40,20 +45,17 @@ class FormController: UIViewController {
         
         manageForm { label, textField in
             if passTypeIsSelected && textField.state != .disabled, let type = LabelType(rawValue: label.text!), let text = textField.text {
-                let formatter = DateFormatter()
-                formatter.dateFormat = "MM / dd / yyyy"
-                
                 switch type {
                 case .firstName: firstName = text
                 case .lastName: lastName = text
-                case .dateOfBirth: dateOfBirth = formatter.date(from: text)
+                case .dateOfBirth: dateOfBirth = dateFormatter.date(from: text)
                 case .socialSecurityNumber: socialSecurityNumber = text
                 case .streetAddress: street = text
                 case .city: city = text
                 case .state: state = text
                 case .zipCode: zipCode = text
                 case .projectNumber: if let number = Int(text) { projectNumber = number }
-                case .dateOfVisit: dateOfVisit = formatter.date(from: text)
+                case .dateOfVisit: dateOfVisit = dateFormatter.date(from: text)
                 default: break
                 }
             }
@@ -71,9 +73,22 @@ class FormController: UIViewController {
     
     var entrant: Passable? = nil
     
+    var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM / dd / yyyy"
+        
+        return formatter
+    }
+    
+    // MARK: - Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        manageForm { $1.setState(to: .disabled) }
+        setupUI()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -83,7 +98,7 @@ class FormController: UIViewController {
     }
     
     @IBAction func showCategories() {
-        manageForm { $1.setState(to: .disabled) }
+        manageForm { $1.setAppearance(to: .disabled) }
         
         let titles: [String]
         
@@ -110,12 +125,12 @@ class FormController: UIViewController {
     @IBAction func toggleFields() {
         manageForm { label, textField in
             if !textField.isFirstResponder {
-                textField.setState(to: .normal)
+                textField.setAppearance(to: .normal)
             }
             
             if let labelType = LabelType(rawValue: label.text!) {
                 if labelType == .companyName {
-                    textField.setState(to: .disabled)
+                    textField.setAppearance(to: .disabled)
                 }
                 
                 switch typeText {
@@ -123,14 +138,14 @@ class FormController: UIViewController {
                     if let guestType = GuestType(rawValue: subtypeText) {
                         switch labelType {
                         case .socialSecurityNumber, .projectNumber, .dateOfVisit:
-                            textField.setState(to: .disabled)
+                            textField.setAppearance(to: .disabled)
                         default: break
                         }
                         
                         if guestType != .season {
                             switch labelType {
                             case .streetAddress, .city, .state, .zipCode:
-                                textField.setState(to: .disabled)
+                                textField.setAppearance(to: .disabled)
                             default: break
                             }
                         }
@@ -138,17 +153,17 @@ class FormController: UIViewController {
                 case "Employee":
                     if let employeeType = EmployeeType(rawValue: subtypeText) {
                         if (employeeType != .contract && labelType == .projectNumber) || labelType == .dateOfVisit {
-                            textField.setState(to: .disabled)
+                            textField.setAppearance(to: .disabled)
                         }
                     }
                 case "Manager":
                     if labelType == .projectNumber || labelType == .dateOfVisit {
-                        textField.setState(to: .disabled)
+                        textField.setAppearance(to: .disabled)
                     }
                 case "Vendor":
                     switch labelType {
                     case .socialSecurityNumber, .projectNumber, .streetAddress, .city, .state, .zipCode:
-                        textField.setState(to: .disabled)
+                        textField.setAppearance(to: .disabled)
                     case .companyName:
                         textField.text = subtypeText
                     default: break
@@ -197,22 +212,22 @@ class FormController: UIViewController {
                 default: break
                 }
             } catch let error as FormError {
-                presentAlert(title: "Error", message: error.description)
+                let title: String
+                
+                switch error {
+                case .invalidName: title = "Invalid Name"
+                case .invalidDate: title = "Invalid Date"
+                case .invalidSocialSecurityNumber: title = "Invalid SSN"
+                case .invalidAddress: title = "Invalid Address"
+                case .invalidProjectNumber: title = "Invalid Project Number"
+                }
+                
+                presentAlert(title: title, message: error.description)
             } catch {
                 fatalError()
             }
         } else {
             presentAlert(title: "Error", message: "Select the type of pass you wish to generate.")
-        }
-    }
-    
-    func manageForm(_ closure: (UILabel, TextField) -> ()) {
-        for stackView in formStackView.subviews {
-            for view in stackView.subviews {
-                if let label = view.subviews.first! as? UILabel, let textField = view.subviews.last! as? TextField {
-                    closure(label, textField)
-                }
-            }
         }
     }
     

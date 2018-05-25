@@ -22,7 +22,7 @@ class SegmentedControl: UISegmentedControl {
                 setTitleTextAttributes([
                     NSAttributedStringKey.font: UIFont.systemFont(ofSize: fontSize, weight: .semibold),
                     NSAttributedStringKey.foregroundColor: color
-                    ], for: .normal)
+                ], for: .normal)
             }
         }
     }
@@ -48,7 +48,7 @@ class TextField: UITextField {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        setState(to: .normal)
+        setAppearance(to: .normal)
         layer.cornerRadius = 8
         layer.shadowOffset = CGSize(width: 0, height: 2)
         layer.shadowColor = UIColor.black.withAlphaComponent(0.1).cgColor
@@ -63,7 +63,7 @@ class TextField: UITextField {
         return UIEdgeInsetsInsetRect(bounds, insets)
     }
     
-    func setState(to state: UIControlState) {
+    func setAppearance(to state: UIControlState) {
         isEnabled = state == .normal || state == .focused
         
         switch state {
@@ -96,6 +96,7 @@ class TextField: UITextField {
         case .disabled:
             text = nil
             label?.textColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 1)
+            
             textColor = UIColor.black.withAlphaComponent(0.1)
             backgroundColor = UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1)
             layer.shadowOpacity = 0.0
@@ -107,19 +108,6 @@ class TextField: UITextField {
 
 
 // MARK: - Extensions
-
-extension UIViewController {
-    func presentAlert(title: String?, message: String? = nil, actionTitle: String = "OK") {
-//        DispatchQueue.main.async {
-            let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            
-            let action = UIAlertAction(title: actionTitle, style: .default)
-            alertController.addAction(action)
-            
-            present(alertController, animated: true)
-//        }
-    }
-}
 
 extension UIView {
 
@@ -167,7 +155,64 @@ extension UIButton {
     
 }
 
-extension FormController: UITextFieldDelegate {
+extension UIViewController {
+    func presentAlert(title: String?, message: String? = nil, actionTitle: String = "OK") {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: actionTitle, style: .default)
+        alertController.addAction(action)
+        
+        present(alertController, animated: true)
+    }
+}
+
+extension FormController: UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    func manageForm(_ closure: (UILabel, TextField) -> ()) {
+        for stackView in formStackView.subviews {
+            for view in stackView.subviews {
+                if let label = view.subviews.first! as? UILabel, let textField = view.subviews.last! as? TextField {
+                    closure(label, textField)
+                }
+            }
+        }
+    }
+    
+    func setupUI() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
+        
+        datePicker.datePickerMode = .date
+        projectNumberPicker.delegate = self
+        projectNumberPicker.dataSource = self
+        
+        manageForm { label, textField in
+            textField.setAppearance(to: .disabled)
+            
+            if let labelType = LabelType(rawValue: label.text!) {
+                let toolbar = UIToolbar()
+                toolbar.sizeToFit()
+                
+                switch labelType {
+                case .dateOfBirth, .dateOfVisit:
+                    let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: #selector(datePickerWillEndEditing))
+                    toolbar.setItems([doneButton], animated: false)
+                    
+                    textField.inputView = datePicker
+                    textField.inputAccessoryView = toolbar
+                case .projectNumber:
+                    let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: #selector(pickerViewWillEndEditing))
+                    toolbar.setItems([doneButton], animated: false)
+                    
+                    textField.inputView = projectNumberPicker
+                    textField.inputAccessoryView = toolbar
+                default: break
+                }
+            }
+        }
+    }
+    
+    // MARK: - TextField Related Stuff
     
     enum LabelType: String {
         case firstName = "First Name"
@@ -213,7 +258,7 @@ extension FormController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         let animator = UIViewPropertyAnimator(duration: 0.3, curve: .linear) {
             if let textField = textField as? TextField {
-                textField.setState(to: .focused)
+                textField.setAppearance(to: .focused)
             }
         }
         
@@ -223,11 +268,73 @@ extension FormController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         let animator = UIViewPropertyAnimator(duration: 0.3, curve: .linear) {
             if let textField = textField as? TextField {
-                textField.setState(to: .normal)
+                textField.setAppearance(to: .normal)
             }
         }
     
         animator.startAnimation()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    // MARK: - UIPickerView Related Stuff
+    
+    @objc func datePickerWillEndEditing() {
+        manageForm { label, textField in
+            if let type = LabelType(rawValue: label.text!), type == .dateOfBirth || type == .dateOfVisit {
+                textField.text = dateFormatter.string(from: datePicker.date)
+            }
+        }
+        
+        view.endEditing(true)
+    }
+    
+    @objc func pickerViewWillEndEditing() {
+        view.endEditing(true)
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return Employee.registeredProjectNumbers.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return "\(Employee.registeredProjectNumbers[row])"
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        manageForm { label, textField in
+            if let type = LabelType(rawValue: label.text!), type == .projectNumber {
+                textField.text = "\(Employee.registeredProjectNumbers[row])"
+            }
+        }
+    }
+    
+    // MARK: - Keyboard Related Stuff
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let info = notification.userInfo, let keyboardFrame = info[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+            let frame = keyboardFrame.cgRectValue
+            actionContainerBottomConstraint.constant = frame.size.height
+            
+            UIView.animate(withDuration: 0.8, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }
+    }
+    
+    @objc func keyboardWillHide(_ notification: Notification) {
+        actionContainerBottomConstraint.constant = 0
+        
+        UIView.animate(withDuration: 0.8, animations: {
+            self.view.layoutIfNeeded()
+        })
     }
     
 }

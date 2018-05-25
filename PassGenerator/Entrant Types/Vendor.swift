@@ -14,12 +14,12 @@ extension Company {
 }
 
 class Vendor: Passable {
-    var name: Name?
-    var address: Address?
-    var dateOfBirth: Date?
-    var socialSecurityNumber: String?
-    let company: Company
+    let name: Name?
+    let address: Address?
+    let dateOfBirth: Date?
+    let socialSecurityNumber: String?
     let dateOfVisit: Date?
+    let company: Company
     
     init(name: Name?, dateOfBirth: Date?, socialSecurityNumber: String?, address: Address?, dateOfVisit: Date?, company: Company) throws {
         guard let date = dateOfBirth else {
@@ -34,8 +34,8 @@ class Vendor: Passable {
         self.address = address
         self.dateOfBirth = date
         self.socialSecurityNumber = socialSecurityNumber
-        self.company = company
         self.dateOfVisit = dateOfVisit
+        self.company = company
     }
     
 }

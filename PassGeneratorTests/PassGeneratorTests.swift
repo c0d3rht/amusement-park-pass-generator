@@ -182,22 +182,22 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.discount == nil)
     }
 
-//    func testContractEmployee() {
-//        handleErrors {
-//            pass = Pass(contentsOf: try Employee(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: projectNumber, type: .contract))
-//        }
-//
-//        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.amusement))
-//        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.kitchen))
-//        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.rideControl))
-//        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.maintenance))
-//        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.office))
-//
-//        XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
-//        XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
-//
-//        XCTAssertFalse(pass.discount == nil)
-//    }
+    func testContractEmployee() {
+        handleErrors {
+            pass = Pass(contentsOf: try Employee(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, projectNumber: projectNumber, type: .contract))
+        }
+
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.amusement))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.kitchen))
+        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.rideControl))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.maintenance))
+        XCTAssertFalse(pass.hasAccess(to: AccessibleArea.office))
+
+        XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
+        XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
+
+        XCTAssertFalse(pass.discount == nil)
+    }
 
     // MARK: - Tests on Manager Type(s)
 
@@ -217,25 +217,6 @@ class PassGeneratorTests: XCTestCase {
 
         XCTAssertFalse(pass.discount == nil)
     }
-    
-    // MARK: - Tests on Vendor Type(s)
-    
-//    func testVendor() {
-//        handleErrors {
-//            pass = Pass(contentsOf: try Vendor(name: fullName, dateOfBirth: dateOfBirth, socialSecurityNumber: socialSecurityNumber, address: address, dateOfVisit: dateOfVisit, company: .fedex))
-//        }
-//
-//        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.amusement))
-//        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.kitchen))
-//        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.rideControl))
-//        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.maintenance))
-//        XCTAssertTrue(pass.hasAccess(to: AccessibleArea.office))
-//
-//        XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
-//        XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
-//
-//        XCTAssertFalse(pass.discount == nil)
-//    }
 
     // MARK: - Tests for Accessibility
 

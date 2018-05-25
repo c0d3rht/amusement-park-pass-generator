@@ -66,6 +66,10 @@ class PassController: UIViewController, PassDelegate {
     @IBAction func validateAreaAccess(_ sender: UIButton) {
         if let text = sender.currentTitle, let area = AccessibleArea(rawValue: text) {
             pass?.swipe(for: area)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + Pass.processingDuration) {
+                self.processingTimeDidElapse()
+            }
         }
     }
     
@@ -73,23 +77,31 @@ class PassController: UIViewController, PassDelegate {
         if let text = sender.currentTitle, let type = RideAccess(rawValue: text) {
             pass?.swipe(for: type)
         }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + Pass.processingDuration) {
+            self.processingTimeDidElapse()
+        }
     }
     
     @IBAction func displayDiscount() {
-        soundEffectsPlayer.playSound(status: pass?.discount != nil)
-        
-        let text: String
-        let backgroundColor: UIColor
-        
-        if let discount = pass?.discount {
-            text = "Food: \(discount.food)%\nMerchandise: \(discount.merchandise)%"
-            backgroundColor = UIColor(red: 0.44, green: 0.81, blue: 0.59, alpha: 1)
-        } else {
-            text = "No discount\navailable"
-            backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1)
+        DispatchQueue.main.async {
+            self.soundEffectsPlayer.playSound(status: self.pass?.discount != nil)
+            
+            let text: String
+            let backgroundColor: UIColor
+            
+            if let discount = self.pass?.discount {
+                text = "Food: \(discount.food)%\nMerchandise: \(discount.merchandise)%"
+                backgroundColor = UIColor(red: 0.44, green: 0.81, blue: 0.59, alpha: 1)
+            } else {
+                text = "No discount\navailable"
+                backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1)
+            }
+            
+            self.displayMessage(text, textColor: .white, backgroundColor: backgroundColor)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: self.processingTimeDidElapse)
         }
-        
-        displayMessage(text, textColor: .white, backgroundColor: backgroundColor)
     }
     
     @IBAction func createNewPass() {

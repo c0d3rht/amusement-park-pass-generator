@@ -13,13 +13,15 @@ extension ManagerType {
 }
 
 class Manager: Passable {
-    var name: Name?
-    var address: Address?
-    var dateOfBirth: Date?
-    var socialSecurityNumber: String?
+    let name: Name?
+    let address: Address?
+    let dateOfBirth: Date?
+    let socialSecurityNumber: String?
     let type: ManagerType
     
     init(name: Name?, dateOfBirth: Date?, socialSecurityNumber: String?, address: Address?, type: ManagerType) throws {
+        self.type = type
+        
         guard let name = name, !name.isIncomplete else {
             throw FormError.invalidName("Your name is incomplete.")
         }
@@ -32,8 +34,14 @@ class Manager: Passable {
             throw FormError.invalidDate("Your birth date is not in the correct format.")
         }
         
+        if type == .senior {
+            guard Employee.isSenior(dateOfBirth: date) else {
+                throw FormError.invalidDate("You cannot apply to be a senior manager.")
+            }
+        }
+        
         guard let string = socialSecurityNumber, Employee.isValidSSN(string) else {
-            throw FormError.invalidNumber("Your social security number is not in the correct format.")
+            throw FormError.invalidSocialSecurityNumber("Your social security number is not in the correct format.")
         }
         
         guard let address = address, !address.isIncomplete else {
@@ -48,7 +56,6 @@ class Manager: Passable {
         self.dateOfBirth = date
         self.socialSecurityNumber = string
         self.address = address
-        self.type = type
     }
     
 }

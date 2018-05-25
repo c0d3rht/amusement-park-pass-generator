@@ -97,11 +97,11 @@ class Pass: CustomStringConvertible {
         }
     }
     
-    private let messageDuration = 5.0
+    static let processingDuration = 5.0
     
     var lastTimeSwiped: Date? = nil {
         didSet {
-            if let previousDate = oldValue, let existingDate = lastTimeSwiped, existingDate < previousDate.addingTimeInterval(messageDuration) {
+            if let previousDate = oldValue, let existingDate = lastTimeSwiped, existingDate < previousDate.addingTimeInterval(Pass.processingDuration) {
                 lastTimeSwiped = previousDate
             }
         }
@@ -158,11 +158,7 @@ class Pass: CustomStringConvertible {
                     delegate?.didSwipeWhenAccessDenied()
                 }
             } else {
-                delegate?.didSwipeDuringProcessingTime(seconds: messageDuration)
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + messageDuration) {
-                self.delegate?.processingTimeDidElapse()
+                delegate?.didSwipeDuringProcessingTime(seconds: Pass.processingDuration)
             }
         }
     }
