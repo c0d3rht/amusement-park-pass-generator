@@ -84,7 +84,7 @@ class Pass: CustomStringConvertible {
             case .vip, .season:
                 return (food: 10, merchandise: 20)
             case .senior:
-                 return (food: 10, merchandise: 10)
+                return (food: 10, merchandise: 10)
             default:
                 return nil
             }
