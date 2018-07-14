@@ -1,6 +1,6 @@
 import UIKit
 
-// MARK: - Custom Views
+// MARK: - Custom Views -
 
 class SegmentedControl: UISegmentedControl {
     
@@ -48,11 +48,8 @@ class TextField: UITextField {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
+        setupUI()
         setAppearance(to: .normal)
-        layer.cornerRadius = 8
-        layer.shadowOffset = CGSize(width: 0, height: 2)
-        layer.shadowColor = UIColor.black.withAlphaComponent(0.1).cgColor
-        layer.shadowRadius = 5
     }
     
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
@@ -61,6 +58,18 @@ class TextField: UITextField {
 
     override open func editingRect(forBounds bounds: CGRect) -> CGRect {
         return UIEdgeInsetsInsetRect(bounds, insets)
+    }
+    
+    func setupUI() {
+        layer.cornerRadius = 8
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowColor = UIColor.black.withAlphaComponent(0.1).cgColor
+        layer.shadowRadius = 5
+        
+        if let placeholder = placeholder {
+            let attributedString = NSAttributedString(string: placeholder, attributes: [NSAttributedStringKey.foregroundColor: UIColor.black.withAlphaComponent(0.1)])
+            attributedPlaceholder = attributedString
+        }
     }
     
     func setAppearance(to state: UIControlState) {
@@ -107,7 +116,7 @@ class TextField: UITextField {
 }
 
 
-// MARK: - Extensions
+// MARK: - Extensions -
 
 extension UIView {
 
@@ -212,7 +221,7 @@ extension FormController: UITextFieldDelegate, UIPickerViewDelegate, UIPickerVie
         }
     }
     
-    // MARK: - TextField Related Stuff
+    // MARK: - TextField
     
     enum LabelType: String {
         case firstName = "First Name"
@@ -280,7 +289,7 @@ extension FormController: UITextFieldDelegate, UIPickerViewDelegate, UIPickerVie
         return true
     }
     
-    // MARK: - UIPickerView Related Stuff
+    // MARK: - UIPickerView
     
     @objc func datePickerWillEndEditing() {
         manageForm { label, textField in
@@ -316,7 +325,7 @@ extension FormController: UITextFieldDelegate, UIPickerViewDelegate, UIPickerVie
         }
     }
     
-    // MARK: - Keyboard Related Stuff
+    // MARK: - Keyboard
     
     @objc func keyboardWillShow(_ notification: Notification) {
         if let info = notification.userInfo, let keyboardFrame = info[UIKeyboardFrameEndUserInfoKey] as? NSValue {

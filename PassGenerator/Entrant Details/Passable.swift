@@ -39,17 +39,13 @@ extension Passable {
         return dateComponents.year! >= 65
     }
     
-    static func extractSSN(from string: String?) -> String? {
-        if let string = string {
-            let pattern = "\\s*(\\d{3})\\s*-?\\s*(\\d{2})\\s*-?\\s*(\\d{4})\\s*"
-            let expression = try! NSRegularExpression(pattern: pattern, options: .caseInsensitive)
-            let matches = expression.matches(in: string, options: .reportCompletion, range: NSRange(location: 0, length: string.count))
-            
-            let text = matches.map { String(string[Range($0.range, in: string)!]) }.first
-            return text?.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "-", with: "")
-        }
+    static func extractSSN(from string: String) -> String? {
+        let pattern = "\\s*(\\d{3})\\s*-?\\s*(\\d{2})\\s*-?\\s*(\\d{4})\\s*"
+        let expression = try! NSRegularExpression(pattern: pattern, options: .caseInsensitive)
+        let matches = expression.matches(in: string, options: .reportCompletion, range: NSRange(location: 0, length: string.count))
         
-        return nil
+        let text = matches.map { String(string[Range($0.range, in: string)!]) }.first
+        return text?.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "-", with: "")
     }
     
 }

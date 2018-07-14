@@ -2,8 +2,7 @@ import UIKit
 
 class PassController: UIViewController, PassDelegate {
     
-    var pass: Pass?
-    let soundEffectsPlayer = SoundEffectsPlayer()
+    // MARK: - Views
     
     @IBOutlet weak var fullNameLabel: UILabel!
     @IBOutlet weak var passDescriptionLabel: UILabel!
@@ -11,6 +10,13 @@ class PassController: UIViewController, PassDelegate {
     
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var dismissButton: UIButton!
+    
+    // MARK: - Local Variables and Constants
+    
+    var pass: Pass?
+    let soundEffectsPlayer = SoundEffectsPlayer()
+    
+    // MARK: - Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,9 +52,9 @@ class PassController: UIViewController, PassDelegate {
                 entitlements += "Skip long queues\n"
             }
             
-            if let discount = pass.discount {
-                entitlements += "Food discounted at \(discount.food)%\n"
-                entitlements += "Merchandise discounted at \(discount.merchandise)%"
+            if !pass.discount.isAvailable() {
+                entitlements += "Food discounted at \(pass.discount.food)%\n"
+                entitlements += "Merchandise discounted at \(pass.discount.merchandise)%"
             } else {
                 entitlements += "No discount available"
             }
@@ -64,34 +70,13 @@ class PassController: UIViewController, PassDelegate {
     }
     
     @IBAction func validateAccess(_ sender: UIButton) {
-        if let text = sender.currentTitle {
+        if let text = sender.currentTitle, let pass = pass {
             if let area = AccessibleArea(rawValue: text) {
-                pass?.swipe(for: area)
+                pass.swipe(for: area)
             } else if let type = RideAccess(rawValue: text) {
-                pass?.swipe(for: type)
-            }
-        }
-    }
-    
-    @IBAction func displayDiscount() {
-        DispatchQueue.main.async {
-            self.soundEffectsPlayer.playSound(status: self.pass?.discount != nil)
-            
-            let text: String
-            let backgroundColor: UIColor
-            
-            if let discount = self.pass?.discount {
-                text = "Food: \(discount.food)%\nMerchandise: \(discount.merchandise)%"
-                backgroundColor = UIColor(red: 0.44, green: 0.81, blue: 0.59, alpha: 1)
-            } else {
-                text = "No discount\navailable"
-                backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1)
-            }
-            
-            self.displayMessage(text, textColor: .white, backgroundColor: backgroundColor)
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + Pass.processingDuration) {
-                self.processingTimeDidElapse()
+                pass.swipe(for: type)
+            } else if text == "Discount Access" {
+                pass.swipe(for: pass.discount)
             }
         }
     }
@@ -106,7 +91,7 @@ class PassController: UIViewController, PassDelegate {
         messageLabel.superview!.backgroundColor = backgroundColor
     }
     
-    func didSwipeWhenAccessGranted() {
+    func didSwipeWhenAccessGranted(for type: AccessType) {
         soundEffectsPlayer.playSound(status: true)
         
         let dateFormatter = DateFormatter()
@@ -118,12 +103,27 @@ class PassController: UIViewController, PassDelegate {
             }
         }
         
-        displayMessage("Access Granted!", textColor: .white, backgroundColor: UIColor(red: 0.44, green: 0.81, blue: 0.59, alpha: 1))
+        var text = "Access Granted!"
+        let backgroundColor = UIColor(red: 0.44, green: 0.81, blue: 0.59, alpha: 1)
+        
+        if let pass = pass, type is Discount {
+            text = "Food: \(pass.discount.food)%\nMerchandise: \(pass.discount.merchandise)%"
+        }
+        
+        displayMessage(text, textColor: .white, backgroundColor: backgroundColor)
     }
     
-    func didSwipeWhenAccessDenied() {
+    func didSwipeWhenAccessDenied(for type: AccessType) {
         soundEffectsPlayer.playSound(status: false)
-        displayMessage("Access Denied!", textColor: .white, backgroundColor: UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1))
+        
+        var text = "Access Denied!"
+        let backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1)
+        
+        if type is Discount {
+            text = "No discount\navailable"
+        }
+        
+        displayMessage(text, textColor: .white, backgroundColor: backgroundColor)
     }
     
     func didSwipeDuringProcessingTime(seconds: Double) {

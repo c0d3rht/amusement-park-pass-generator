@@ -53,7 +53,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
 
-        XCTAssertTrue(pass.discount == nil)
+        XCTAssertTrue(!pass.discount.isAvailable())
     }
 
     func testVIPGuest() {
@@ -70,7 +70,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertTrue(pass.hasAccess(to: RideAccess.skipQueues))
         
-        XCTAssertFalse(pass.discount == nil)
+        XCTAssertFalse(!pass.discount.isAvailable())
     }
     
 //    func testChildGuest() {
@@ -89,7 +89,7 @@ class PassGeneratorTests: XCTestCase {
 //        XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
 //        XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
 //
-//        XCTAssertTrue(pass.discount == nil)
+//        XCTAssertTrue(!pass.discount.isAvailable())
 //    }
     
     func testSeasonGuest() {
@@ -106,7 +106,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertTrue(pass.hasAccess(to: RideAccess.skipQueues))
         
-        XCTAssertFalse(pass.discount == nil)
+        XCTAssertFalse(!pass.discount.isAvailable())
     }
     
 //    func testSeniorGuest() {
@@ -123,7 +123,7 @@ class PassGeneratorTests: XCTestCase {
 //        XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
 //        XCTAssertTrue(pass.hasAccess(to: RideAccess.skipQueues))
 //
-//        XCTAssertFalse(pass.discount == nil)
+//        XCTAssertFalse(!pass.discount.isAvailable())
 //    }
     
     // MARK: - Tests on Employee Types
@@ -142,7 +142,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
         
-        XCTAssertFalse(pass.discount == nil)
+        XCTAssertFalse(!pass.discount.isAvailable())
     }
     
     func testRideEmployee() {
@@ -159,7 +159,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
         
-        XCTAssertFalse(pass.discount == nil)
+        XCTAssertFalse(!pass.discount.isAvailable())
     }
     
     func testMaintenanceEmployee() {
@@ -176,7 +176,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
         
-        XCTAssertFalse(pass.discount == nil)
+        XCTAssertFalse(!pass.discount.isAvailable())
     }
 
     func testContractEmployee1001() {
@@ -193,7 +193,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
 
-        XCTAssertTrue(pass.discount == nil)
+        XCTAssertTrue(!pass.discount.isAvailable())
     }
     
     func testContractEmployee1002() {
@@ -210,7 +210,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
         
-        XCTAssertTrue(pass.discount == nil)
+        XCTAssertTrue(!pass.discount.isAvailable())
     }
     
     func testContractEmployee1003() {
@@ -227,7 +227,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
         
-        XCTAssertTrue(pass.discount == nil)
+        XCTAssertTrue(!pass.discount.isAvailable())
     }
     
     func testContractEmployee2001() {
@@ -244,7 +244,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
         
-        XCTAssertTrue(pass.discount == nil)
+        XCTAssertTrue(!pass.discount.isAvailable())
     }
     
     func testContractEmployee2002() {
@@ -261,7 +261,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
         
-        XCTAssertTrue(pass.discount == nil)
+        XCTAssertTrue(!pass.discount.isAvailable())
     }
 
     // MARK: - Tests on Manager Type(s)
@@ -280,7 +280,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertTrue(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
 
-        XCTAssertFalse(pass.discount == nil)
+        XCTAssertFalse(!pass.discount.isAvailable())
     }
     
     // MARK: - Tests on Vendor Types
@@ -299,7 +299,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
         
-        XCTAssertTrue(pass.discount == nil)
+        XCTAssertTrue(!pass.discount.isAvailable())
     }
     
     func testVendorOrkin() {
@@ -316,7 +316,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
         
-        XCTAssertTrue(pass.discount == nil)
+        XCTAssertTrue(!pass.discount.isAvailable())
     }
     
     func testVendorFedex() {
@@ -333,7 +333,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
         
-        XCTAssertTrue(pass.discount == nil)
+        XCTAssertTrue(!pass.discount.isAvailable())
     }
     
     func testVendorNWElectrical() {
@@ -350,7 +350,7 @@ class PassGeneratorTests: XCTestCase {
         XCTAssertFalse(pass.hasAccess(to: RideAccess.allRides))
         XCTAssertFalse(pass.hasAccess(to: RideAccess.skipQueues))
         
-        XCTAssertTrue(pass.discount == nil)
+        XCTAssertTrue(!pass.discount.isAvailable())
     }
 
     // MARK: - Tests for Accessibility

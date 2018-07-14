@@ -38,7 +38,7 @@ class Employee: Passable {
             throw FormError.invalidDate("Your birth date is not in the correct format.")
         }
         
-        guard let string = Employee.extractSSN(from: socialSecurityNumber) else {
+        guard let string = socialSecurityNumber, let extractedString = Employee.extractSSN(from: string) else {
             throw FormError.invalidSocialSecurityNumber("Your social security number is not in the correct format.")
         }
         
@@ -58,7 +58,7 @@ class Employee: Passable {
         
         self.name = name
         self.dateOfBirth = date
-        self.socialSecurityNumber = string
+        self.socialSecurityNumber = extractedString
         self.address = address
         self.projectNumber = projectNumber
     }
