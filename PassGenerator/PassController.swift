@@ -63,8 +63,8 @@ class PassController: UIViewController, PassDelegate {
             paragraphStyle.lineSpacing = 2
             
             entitlementsLabel.attributedText = NSAttributedString(string: entitlements, attributes: [
-                NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .medium),
-                NSAttributedStringKey.paragraphStyle: paragraphStyle
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18, weight: .medium),
+                NSAttributedString.Key.paragraphStyle: paragraphStyle
             ])
         }
     }

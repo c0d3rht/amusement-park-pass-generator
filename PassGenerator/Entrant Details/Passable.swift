@@ -36,7 +36,7 @@ extension Passable {
     
     static func isSenior(dateOfBirth date: Date) -> Bool {
         let dateComponents = Calendar.current.dateComponents([.year], from: date, to: Date())
-        return dateComponents.year! >= 65
+        return dateComponents.year! >= 40
     }
     
     static func extractSSN(from string: String) -> String? {

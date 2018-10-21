@@ -212,10 +212,12 @@
 				TargetAttributes = {
 					B536889C208A0D02000360B1 = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 1000;
 						TestTargetID = B5A63476207F896700F71C80;
 					};
 					B5A63476207F896700F71C80 = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -334,7 +336,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = c0d3rht.github.io.PassGeneratorTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PassGenerator.app/PassGenerator";
 			};
@@ -354,7 +356,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = c0d3rht.github.io.PassGeneratorTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PassGenerator.app/PassGenerator";
 			};
@@ -487,7 +489,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = c0d3rht.github.io.PassGenerator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
@@ -505,7 +507,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = c0d3rht.github.io.PassGenerator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;

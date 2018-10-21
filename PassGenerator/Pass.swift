@@ -35,7 +35,7 @@ class Pass {
         case is RideAccess:
             return rideAccess.contains(type as! RideAccess)
         case is Discount:
-            return !(type as! Discount).isAvailable()
+            return (type as! Discount).isAvailable()
         default: return false
         }
     }

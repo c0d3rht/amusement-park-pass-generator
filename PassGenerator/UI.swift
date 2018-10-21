@@ -8,20 +8,20 @@ class SegmentedControl: UISegmentedControl {
         super.init(coder: aDecoder)
         
         setTitleTextAttributes([
-            NSAttributedStringKey.foregroundColor: UIColor.white.withAlphaComponent(0.4)
+            NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.4)
             ], for: .normal)
         
         setTitleTextAttributes([
-            NSAttributedStringKey.foregroundColor: UIColor.white
+            NSAttributedString.Key.foregroundColor: UIColor.white
             ], for: .selected)
     }
     
     @IBInspectable var fontSize: CGFloat = 0.0 {
         didSet {
-            if let color = titleTextAttributes(for: .normal)?[NSAttributedStringKey.foregroundColor] as? UIColor {
+            if let color = titleTextAttributes(for: .normal)?[NSAttributedString.Key.foregroundColor] as? UIColor {
                 setTitleTextAttributes([
-                    NSAttributedStringKey.font: UIFont.systemFont(ofSize: fontSize, weight: .semibold),
-                    NSAttributedStringKey.foregroundColor: color
+                    NSAttributedString.Key.font: UIFont.systemFont(ofSize: fontSize, weight: .semibold),
+                    NSAttributedString.Key.foregroundColor: color
                 ], for: .normal)
             }
         }
@@ -53,11 +53,11 @@ class TextField: UITextField {
     }
     
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(bounds, insets)
+        return bounds.inset(by: insets)
     }
 
     override open func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(bounds, insets)
+        return bounds.inset(by: insets)
     }
     
     func setupUI() {
@@ -67,12 +67,12 @@ class TextField: UITextField {
         layer.shadowRadius = 5
         
         if let placeholder = placeholder {
-            let attributedString = NSAttributedString(string: placeholder, attributes: [NSAttributedStringKey.foregroundColor: UIColor.black.withAlphaComponent(0.1)])
+            let attributedString = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.black.withAlphaComponent(0.1)])
             attributedPlaceholder = attributedString
         }
     }
     
-    func setAppearance(to state: UIControlState) {
+    func setAppearance(to state: UIControl.State) {
         isEnabled = state == .normal || state == .focused
         
         switch state {
@@ -188,8 +188,8 @@ extension FormController: UITextFieldDelegate, UIPickerViewDelegate, UIPickerVie
     }
     
     func setupUI() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         datePicker.datePickerMode = .date
         projectNumberPicker.delegate = self
@@ -328,7 +328,7 @@ extension FormController: UITextFieldDelegate, UIPickerViewDelegate, UIPickerVie
     // MARK: - Keyboard
     
     @objc func keyboardWillShow(_ notification: Notification) {
-        if let info = notification.userInfo, let keyboardFrame = info[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+        if let info = notification.userInfo, let keyboardFrame = info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let frame = keyboardFrame.cgRectValue
             actionContainerTopConstraint.constant = frame.size.height - actionContainer.frame.height
             view.layoutIfNeeded()
